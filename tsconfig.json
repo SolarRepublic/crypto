@@ -1,0 +1,21 @@
+{
+	"extends": "@blake.regalia/tsconfig/tsconfig.node.json",
+
+	"compilerOptions": {
+		"baseUrl": ".",
+		"outDir": "dist",
+		"declarationDir": "dist",
+
+		"declaration": true,
+		"noImplicitReturns": false,
+
+		"allowJs": false,
+
+		"module": "ESNext",
+		"moduleResolution": "Bundler"
+	},
+
+	"include": [
+		"src/**/*.ts",
+	],
+}
