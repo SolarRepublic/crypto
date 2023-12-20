@@ -5,3 +5,4 @@ export * from './entropy.js';
 export * from './runtime-key.js';
 export * from './sensitive-bytes.js';
 export * from './types.js';
+export * from './util.js';
