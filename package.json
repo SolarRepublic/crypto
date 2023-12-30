@@ -28,7 +28,7 @@
   },
   "scripts": {
     "clean": "rm -rf dist/*",
-    "build": "tsc",
+    "build": "tsc && tsc-esm-fix --target='dist'",
     "test": "node --loader ts-node/esm",
     "test:all": "yarn test test/**.ts",
     "debug": "node --inspect-brk --loader ts-node/esm"
