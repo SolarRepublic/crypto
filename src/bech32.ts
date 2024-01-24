@@ -57,7 +57,9 @@ const regroup_bits = (a_words: Iterable<number>, ni_in: number, ni_out: number, 
 
 
 
-export function pubkey_to_bech32(z_pubkey: string | Uint8Array, si_hrp: string): CwAccountAddr {
+export const pubkey_to_bech32 = <
+	si_hrp extends string,
+>(z_pubkey: string | Uint8Array, si_hrp: si_hrp): CwAccountAddr<si_hrp> => {
 	const atu8_pk = 'string' === typeof z_pubkey? base64_to_bytes(z_pubkey): z_pubkey;
 	if(!(atu8_pk instanceof Uint8Array)) {
 		throw TypeError(`Pubkey argument must be a Uint8Array or base64-encoded string`);
@@ -71,7 +73,7 @@ export function pubkey_to_bech32(z_pubkey: string | Uint8Array, si_hrp: string):
 
 	// convert to bech32 string
 	return bech32_encode(si_hrp, atu8_ripemd160);
-}
+};
 
 
 // option A
@@ -82,7 +84,9 @@ export function pubkey_to_bech32(z_pubkey: string | Uint8Array, si_hrp: string):
  * @param atu8_data - canonical addr data
  * @returns 
  */
-export const bech32_encode = (si_hrp: string, atu8_data: Uint8Array): CwAccountAddr => {
+export const bech32_encode = <
+	si_hrp extends string,
+>(si_hrp: si_hrp, atu8_data: Uint8Array): CwAccountAddr<si_hrp> => {
 	let xb_checksum = prefix_checksum(si_hrp);
 
 	let sa_output = si_hrp+'1';
@@ -103,7 +107,7 @@ export const bech32_encode = (si_hrp: string, atu8_data: Uint8Array): CwAccountA
 		sa_output += SX_ALPHABET.charAt(x_word);
 	}
 
-	return sa_output as CwAccountAddr;
+	return sa_output as CwAccountAddr<si_hrp>;
 };
 
 // // option B
