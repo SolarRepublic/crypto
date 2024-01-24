@@ -70,7 +70,7 @@ export function pubkey_to_bech32(z_pubkey: string | Uint8Array, si_hrp: string):
 	const atu8_ripemd160 = ripemd160_sync(atu8_sha256);
 
 	// convert to bech32 string
-	return bech32_encode(si_hrp, atu8_ripemd160) as CwAccountAddr;
+	return bech32_encode(si_hrp, atu8_ripemd160);
 }
 
 
@@ -82,7 +82,7 @@ export function pubkey_to_bech32(z_pubkey: string | Uint8Array, si_hrp: string):
  * @param atu8_data - canonical addr data
  * @returns 
  */
-export const bech32_encode = (si_hrp: string, atu8_data: Uint8Array): string => {
+export const bech32_encode = (si_hrp: string, atu8_data: Uint8Array): CwAccountAddr => {
 	let xb_checksum = prefix_checksum(si_hrp);
 
 	let sa_output = si_hrp+'1';
@@ -103,7 +103,7 @@ export const bech32_encode = (si_hrp: string, atu8_data: Uint8Array): string => 
 		sa_output += SX_ALPHABET.charAt(x_word);
 	}
 
-	return sa_output;
+	return sa_output as CwAccountAddr;
 };
 
 // // option B
