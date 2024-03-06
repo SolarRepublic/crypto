@@ -25,10 +25,10 @@
   resolved "https://registry.yarnpkg.com/@blake.regalia/belt/-/belt-0.31.1.tgz#9565687062f2104e3e54af96ae06747014377ce4"
   integrity sha512-VuL8sfhn+lYGAow5xht5jjV75k0CfudZpWI0IWdgc2uj20X6UfdLdq4BuA6CAnVEkyWb/NVhU6cs1o5TWtzS0A==
 
-"@blake.regalia/belt@^0.32.2":
-  version "0.32.2"
-  resolved "https://registry.yarnpkg.com/@blake.regalia/belt/-/belt-0.32.2.tgz#4533ab903c44ae87f8e41a1465dd5f1f45b1464c"
-  integrity sha512-VXhwvFe9vjSbssaBGZtRjZJ+q4KWKrJFFh8nGR+om9JRidaYPPhFy4mZB06FRcmfkASmib06zENlzypMbc8pNw==
+"@blake.regalia/belt@^0.32.5":
+  version "0.32.5"
+  resolved "https://registry.yarnpkg.com/@blake.regalia/belt/-/belt-0.32.5.tgz#f2617f2a5954e7ad64b5c2759d51776f0f5fdf57"
+  integrity sha512-0bCQ5s/yRb6XgUkeARdvUgWrem9xhwgIAezrCm+3v+dZprYP/3orvcry515H+KtSAA2Uoj3YMJcSAXz/nkddDA==
 
 "@blake.regalia/eslint-config-elite@^0.4.4":
   version "0.4.4"
@@ -164,10 +164,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@solar-republic/types@^0.2.4":
-  version "0.2.4"
-  resolved "https://registry.yarnpkg.com/@solar-republic/types/-/types-0.2.4.tgz#f160188992a17e868385cf460e552b9cf6237bd0"
-  integrity sha512-RpsP16joZjpva3mIbSchmwNrFMtuCLv84eP6Av3U4X+hALH1vXoenN1s1jSdnMZIe+80u74F67+DqyX1/KaAGg==
+"@solar-republic/types@^0.2.5":
+  version "0.2.5"
+  resolved "https://registry.yarnpkg.com/@solar-republic/types/-/types-0.2.5.tgz#3fcecfba90ab89dfba07156e31c3e4d09d820d8a"
+  integrity sha512-rgiKgNDGlQy2OYyYupuPbRrUyp89lYZdcRDvnb0wd/UMb57CsNxaTrsatNv7zMYnkS4ZHuZVunHoFiosouWjmw==
 
 "@solar-republic/wasm-secp256k1@^0.2.2":
   version "0.2.2"
