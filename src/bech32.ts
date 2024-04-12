@@ -1,5 +1,5 @@
 
-import type {Nilable} from '@blake.regalia/belt';
+import type {NaiveBase64, Nilable} from '@blake.regalia/belt';
 
 import type {CwAccountAddr} from '@solar-republic/types';
 
@@ -56,10 +56,15 @@ const regroup_bits = (a_words: Iterable<number>, ni_in: number, ni_out: number, 
 };
 
 
-
+/**
+ * Converts a public key into a bech32 address
+ * @param z_pubkey - public key bytes as Uint8Array or base64-encoded string
+ * @param si_hrp - the human readable part of the bech32 address
+ * @returns bech32 address
+ */
 export const pubkey_to_bech32 = <
 	si_hrp extends string,
->(z_pubkey: string | Uint8Array, si_hrp: si_hrp): CwAccountAddr<si_hrp> => {
+>(z_pubkey: NaiveBase64 | Uint8Array, si_hrp: si_hrp): CwAccountAddr<si_hrp> => {
 	const atu8_pk = 'string' === typeof z_pubkey? base64_to_bytes(z_pubkey): z_pubkey;
 	if(!(atu8_pk instanceof Uint8Array)) {
 		throw TypeError(`Pubkey argument must be a Uint8Array or base64-encoded string`);
