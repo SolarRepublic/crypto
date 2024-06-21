@@ -25,8 +25,8 @@ importers:
         specifier: ^0.2.0
         version: 0.2.0(typescript@5.5.2)
       '@solar-republic/types':
-        specifier: ^0.2.10
-        version: 0.2.10
+        specifier: ^0.2.11
+        version: 0.2.11
       '@types/chai':
         specifier: ^4.3.16
         version: 4.3.16
@@ -160,8 +160,8 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
-  '@solar-republic/types@0.2.10':
-    resolution: {integrity: sha512-XkWaSKZVqUSscpy3/AE16zwuG7wPiWbO3Rrp77EHjwnDd1Sj2/jeowz6KgZwsGa8aMrL7/4R+700tcdWeWVxKA==}
+  '@solar-republic/types@0.2.11':
+    resolution: {integrity: sha512-/eiTrehpEFYAyps5MejGf5Fyr1R7Ln6EZxGQRhjfHE5eqkh/2SkTKDbb13fKGFxP8a4mTBvZCvHEwJYxfNqutg==}
 
   '@solar-republic/wasm-secp256k1@0.2.6':
     resolution: {integrity: sha512-c5vTGSwRlLbXhMrhlZisqQLxMg2GE2VRifUDQanNnP3RyLnaXAxPQ3hgiV9skZHjoTayu09b7EKYGiDC+5JbEA==}
@@ -1379,7 +1379,7 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.17.1
 
-  '@solar-republic/types@0.2.10': {}
+  '@solar-republic/types@0.2.11': {}
 
   '@solar-republic/wasm-secp256k1@0.2.6':
     dependencies:
