@@ -1,6 +1,6 @@
 {
   "name": "@solar-republic/crypto",
-  "version": "0.2.12",
+  "version": "0.2.13",
   "description": "Core crypto library for StarShell",
   "homepage": "https://starshell.net/",
   "repository": "github:SolarRepublic/crypto",
