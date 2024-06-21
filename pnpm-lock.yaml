@@ -9,11 +9,11 @@ importers:
   .:
     dependencies:
       '@blake.regalia/belt':
-        specifier: ^0.36.3
-        version: 0.36.3
+        specifier: ^0.37.0
+        version: 0.37.0
       '@solar-republic/wasm-secp256k1':
-        specifier: ^0.2.6
-        version: 0.2.6
+        specifier: ^0.2.8
+        version: 0.2.8
       hash-wasm:
         specifier: ^4.11.0
         version: 4.11.0
@@ -25,8 +25,8 @@ importers:
         specifier: ^0.2.0
         version: 0.2.0(typescript@5.5.2)
       '@solar-republic/types':
-        specifier: ^0.2.11
-        version: 0.2.11
+        specifier: ^0.2.12
+        version: 0.2.12
       '@types/chai':
         specifier: ^4.3.16
         version: 4.3.16
@@ -77,11 +77,8 @@ packages:
   '@blake.regalia/belt@0.31.1':
     resolution: {integrity: sha512-VuL8sfhn+lYGAow5xht5jjV75k0CfudZpWI0IWdgc2uj20X6UfdLdq4BuA6CAnVEkyWb/NVhU6cs1o5TWtzS0A==}
 
-  '@blake.regalia/belt@0.35.6':
-    resolution: {integrity: sha512-B5wE5BU8lLyM5otOMmR34u7AH82aJw4hUUVWdH0hPxWJ5SCTCvBqNaUFiHzBB901XNdJ4k4vMjXD3qbO0OS2Wg==}
-
-  '@blake.regalia/belt@0.36.3':
-    resolution: {integrity: sha512-Ll/71tAlDxttXjIzmgTyWIsT8inKhkH92V1flPtoCpZ0psHZxikQsZvfyvx2Ub9fVz5NprTup5g25mkhNPj7fg==}
+  '@blake.regalia/belt@0.37.0':
+    resolution: {integrity: sha512-kpAXIn9ioUBVRjwvtyyjZRzwQ2MRJbI/AKY+4maQZD+daG/9tbCN0ET8BP9WzfqD0jZ8i5TIjEByjUdWpzn1MQ==}
 
   '@blake.regalia/eslint-config-elite@0.4.4':
     resolution: {integrity: sha512-Lcpi2Y2yiY2WXDzr/mfrZNYSCx6J4se8iOG/WkCdqBlaolZH0QHyyJpgqzDG1XitlQ/I/ikpruhB1F6DwEEbfg==}
@@ -160,11 +157,11 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
-  '@solar-republic/types@0.2.11':
-    resolution: {integrity: sha512-/eiTrehpEFYAyps5MejGf5Fyr1R7Ln6EZxGQRhjfHE5eqkh/2SkTKDbb13fKGFxP8a4mTBvZCvHEwJYxfNqutg==}
+  '@solar-republic/types@0.2.12':
+    resolution: {integrity: sha512-EnJa8d5yv73YMkm1lBlFxDrZyJTBD0zz2rh6cHJINpfVjsH/34t5P824CBJ3Nj+xicfuFXWDlxVHCNbkS52h9A==}
 
-  '@solar-republic/wasm-secp256k1@0.2.6':
-    resolution: {integrity: sha512-c5vTGSwRlLbXhMrhlZisqQLxMg2GE2VRifUDQanNnP3RyLnaXAxPQ3hgiV9skZHjoTayu09b7EKYGiDC+5JbEA==}
+  '@solar-republic/wasm-secp256k1@0.2.8':
+    resolution: {integrity: sha512-tFSO+YOqZt/E6EvrjxhxcrPAn8hs5cPx2Op/+rzznrQuMHEONxvb3MFiw9V8JbcMvrMiCypLvFR7nkrI8+h3sg==}
 
   '@tsconfig/node10@1.0.10':
     resolution: {integrity: sha512-PiaIWIoPvO6qm6t114ropMCagj6YAF24j9OkCA2mJDXFnlionEwhsBCJ8yek4aib575BI3OkART/90WsgHgLWw==}
@@ -1278,9 +1275,7 @@ snapshots:
 
   '@blake.regalia/belt@0.31.1': {}
 
-  '@blake.regalia/belt@0.35.6': {}
-
-  '@blake.regalia/belt@0.36.3': {}
+  '@blake.regalia/belt@0.37.0': {}
 
   '@blake.regalia/eslint-config-elite@0.4.4(@typescript-eslint/parser@7.13.1(eslint@8.57.0)(typescript@5.5.2))(eslint@8.57.0)(ts-node@10.9.2(@types/node@20.14.7)(typescript@5.5.2))(typescript@5.5.2)':
     dependencies:
@@ -1379,11 +1374,11 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.17.1
 
-  '@solar-republic/types@0.2.11': {}
+  '@solar-republic/types@0.2.12': {}
 
-  '@solar-republic/wasm-secp256k1@0.2.6':
+  '@solar-republic/wasm-secp256k1@0.2.8':
     dependencies:
-      '@blake.regalia/belt': 0.35.6
+      '@blake.regalia/belt': 0.37.0
 
   '@tsconfig/node10@1.0.10': {}
 
