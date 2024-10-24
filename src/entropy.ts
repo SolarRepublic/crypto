@@ -1,3 +1,5 @@
+import {subtle_derive_bits, subtle_import_key} from '@blake.regalia/belt';
+
 import {ATU8_SHA512_STARSHELL} from './constants.js';
 import {random_bytes} from './util.js';
 
@@ -11,7 +13,7 @@ export class EntropyProducer {
 		if(!atu8_seed) atu8_seed = random_bytes(32);
 
 		// import seed as crypto key
-		const dk_seed = await crypto.subtle.importKey('raw', atu8_seed, 'HKDF', false, ['deriveBits']);
+		const dk_seed = await subtle_import_key('raw', atu8_seed, 'HKDF', false, ['deriveBits']);
 
 		// bytes of entropy needed: 32 bits per variable
 		const nb_entropy_needed = n_variables * 4;
@@ -20,7 +22,7 @@ export class EntropyProducer {
 		const nb_derive = Math.ceil(nb_entropy_needed / 64) * 64;
 
 		// derive bits
-		const atu8_derived = await crypto.subtle.deriveBits({
+		const atu8_derived = await subtle_derive_bits({
 			name: 'HKDF',
 			hash: 'SHA-512',
 			salt: ATU8_SHA512_STARSHELL,

@@ -5,7 +5,7 @@ import type {CwAccountAddr} from '@solar-republic/types';
 
 import {__UNDEFINED, base64_to_bytes, die} from '@blake.regalia/belt';
 
-import {ripemd160_sync} from './wasm/ripemd160.js';
+import {ripemd160_any_sync} from './ripemd160.js';
 import {sha256_sync} from './wasm/sha256.js';
 
 const SX_ALPHABET = 'qpzry9x8gf2tvdw0s3jn54khce6mua7l';
@@ -74,7 +74,7 @@ export const pubkey_to_bech32 = <
 	const atu8_sha256 = sha256_sync(atu8_pk);
 
 	// perform ripemd-160 hashing on the result
-	const atu8_ripemd160 = ripemd160_sync(atu8_sha256);
+	const atu8_ripemd160 = ripemd160_any_sync(atu8_sha256);
 
 	// convert to bech32 string
 	return bech32_encode(si_hrp, atu8_ripemd160);

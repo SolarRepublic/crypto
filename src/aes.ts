@@ -1,3 +1,5 @@
+import {bytes, subtle_decrypt, subtle_encrypt} from '@blake.regalia/belt';
+
 import {ATU8_SHA256_STARSHELL} from './constants.js';
 
 
@@ -22,7 +24,7 @@ export async function aes_gcm_encrypt(
 	ni_tag=128
 ): Promise<Uint8Array> {
 	try {
-		return new Uint8Array(await crypto.subtle.encrypt({
+		return bytes(await subtle_encrypt({
 			name: 'AES-GCM',
 			iv: atu8_nonce,
 			additionalData: atu8_verify,
@@ -42,7 +44,7 @@ export async function aes_gcm_decrypt(
 	ni_tag=128
 ): Promise<Uint8Array> {
 	try {
-		return new Uint8Array(await crypto.subtle.decrypt({
+		return bytes(await subtle_decrypt({
 			name: 'AES-GCM',
 			iv: atu8_nonce,
 			additionalData: atu8_verify,
