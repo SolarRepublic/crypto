@@ -1,0 +1,3 @@
+[submodule "submodules/hash-wasm"]
+	path = submodules/hash-wasm
+	url = https://github.com/Daninet/hash-wasm

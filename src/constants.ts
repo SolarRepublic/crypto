@@ -9,3 +9,5 @@ export const ATU8_SHA512_STARSHELL = hex_to_bytes('34ba055f29242f0a71555ca843f9b
 // maximum value of an unsigned 64-bit integer
 export const XG_UINT64_MAX = (2n ** 64n) - 1n;
 
+// global enable WASM flag
+export const B_ENABLE_WASM = !!(import.meta.env as Record<string, string>)?.['ENABLE_WASM'];

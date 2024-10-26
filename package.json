@@ -34,7 +34,6 @@
     "debug": "node --inspect-brk --loader ts-node/esm"
   },
   "devDependencies": {
-    "@blake.regalia/belt": "^0.40.1",
     "@blake.regalia/eslint-config-elite": "^0.4.4",
     "@blake.regalia/tsconfig": "^0.2.0",
     "@solar-republic/types": "^0.2.12",
@@ -52,7 +51,7 @@
     "typescript": "^5.6.3"
   },
   "dependencies": {
-    "@blake.regalia/belt": "^0.40.1",
+    "@blake.regalia/belt": "^0.41.2",
     "@solar-republic/wasm-secp256k1": "^0.3.0",
     "hash-wasm": "^4.11.0"
   },

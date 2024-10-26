@@ -5,7 +5,7 @@ import type {NaiveBase58} from '@blake.regalia/belt';
 import {bytes, bytes_to_base58, concat2, dataview, die, hmac, sha256, subtle_import_key, subtle_sign, text_to_bytes, zero_out} from '@blake.regalia/belt';
 
 import {ripemd160_any_sync} from './ripemd160';
-import {resolve_key_producer, runtime_key_access, runtime_key_create} from './runtime-key';
+import {resolve_key_producer, runtime_key_access, runtime_key_create, runtime_key_destroy} from './runtime-key';
 import {secp256k1_sk_to_pk, secp256k1_tweak_sk_add, secp256k1_valid_sk} from './secp256k1';
 import {HM_PRIVATES} from './util';
 
@@ -76,15 +76,18 @@ void subtle_import_key('raw', text_to_bytes('Bitcoin seed'), {
 const hm_privates = HM_PRIVATES as WeakMap<Bip32Handle, Bip32PrivateFields>;
 
 
-
+/**
+ * BIP-32
+ * This proprietary implementation exclusively uses Uint8Arrays for all key material so they can be zeroed out after use.
+ * This version also does not support "neutered" public keys as it is only concerned with private key generation.
+ */
 export const bip32_create = async(
 	k_sk: RuntimeKeyHandle,
 	atu8_chain: Uint8Array,
 	atu8_parent=ATU8_FINGERPRINT_NIL,
 	i_depth=0,
-	i_index=0,
-	k_parent: Bip32Handle | null=null
-) => {
+	i_index=0
+): Promise<Bip32Handle> => {
 	// access the runtime key data
 	const atu8_pk33 = await runtime_key_access(k_sk, secp256k1_sk_to_pk);
 
@@ -106,13 +109,15 @@ export const bip32_create = async(
 		atu8_chain,
 		atu8_parent,
 		i_index,
-		// k_parent,
 	]);
 
 	// return instance
 	return k_bip32;
 };
 
+/**
+ * BIP-32: {@link https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#Master_key_generation Master Key Generation}
+ */
 export const bip32_from_master = async(z_seed: KeyProducer): Promise<Bip32Handle> => {
 	// create seed
 	const atu8_seed = await resolve_key_producer(z_seed);
@@ -230,41 +235,43 @@ export const bip32_export_base58 = async(k_bip32: Bip32Handle): Promise<NaiveBas
  */
 export const bip32_derive = async(
 	k_bip32: Bip32Handle,
-	i_child: number
-) => {
+	i_child: number,
+	z_harden?: boolean | 0 | 1
+): Promise<Bip32Handle> => {
 	// destructure private field
 	const [
 		k_sk,
 		atu8_chain,
-		atu8_parent,
-		i_index,
 	] = hm_privates.get(k_bip32)!;
+
+	// harden
+	i_child += z_harden && i_child < N_BIP32_HARDENED? N_BIP32_HARDENED: 0;
 
 	// prep data bytes
 	const atu8_data = bytes(1 + 32 + 4);
 
-	// with secret key
-	await runtime_key_access(k_sk, (atu8_sk) => {
-		// safety check private key
-		if(!secp256k1_valid_sk(atu8_sk)) die('Invalid private key key');
+	// child is a hardened key
+	if(i_child >= N_BIP32_HARDENED) {
+		// > Data = 0x00 || ser256(kpar) || ser32(i)
+		atu8_data[0] = 0x00;
 
-		// child is a hardened key
-		if(i_child >= N_BIP32_HARDENED) {
-			// > Data = 0x00 || ser256(kpar) || ser32(i)
-			atu8_data[0] = 0x00;
+		// with secret key
+		await runtime_key_access(k_sk, (atu8_sk) => {
+			// safety check private key
+			if(!secp256k1_valid_sk(atu8_sk)) die('Invalid private key key');
 
-			// copy private ky into data
+			// copy private key into data
 			atu8_data.set(atu8_sk, 1);
-		}
-		// child is a normal key
-		else {
-			// > Data = serP(point(kpar)) || ser32(i)
-			atu8_data.set(k_bip32.pk33, 0);
-		}
+		});
+	}
+	// child is a normal key
+	else {
+		// > Data = serP(point(kpar)) || ser32(i)
+		atu8_data.set(k_bip32.pk33, 0);
+	}
 
-		// write ser32(i)
-		dataview(atu8_data.buffer).setUint32(atu8_data.byteOffset+33, i_child, false);
-	});
+	// write ser32(i)
+	dataview(atu8_data.buffer).setUint32(atu8_data.byteOffset+33, i_child, false);
 
 	// > let I = HMAC-SHA512(Key = cpar, Data
 	const atu8_i = await hmac(atu8_chain, atu8_data, 'SHA-512');
@@ -308,4 +315,119 @@ export const bip32_derive = async(
 	}
 };
 
+const S_INVALID_SEED = 'Invalid BIP-32 seed key';
+const S_INDICATES = S_INVALID_SEED+'; indicates master key but has ';
 
+/**
+ * Import a BIP-32 node from a private seed key. It is the caller's responsibility to zero out the private key data
+ * @param atu8_node 
+ * @returns 
+ */
+export const bip32_import = (atu8_node: Uint8Array): Promise<Bip32Handle> => {
+	// assert seed length
+	if(78 !== atu8_node.length) die(S_INVALID_SEED+' length');
+
+	// create data view
+	const dv_seed = dataview(atu8_node.buffer);
+
+	// bytes offset within buffer
+	const ib_offset = atu8_node.byteOffset;
+
+	// get version
+	const n_version = dv_seed.getUint32(ib_offset, false);
+	if(XB_VERSION_BITCOIN_PRIVATE !== n_version) die('This BIP-32 implmenetation only supports private keys');
+
+
+	// copy parent out to new buffer
+	const atu8_parent = atu8_node.slice(5, 9);
+
+	// parse index
+	const i_index = dv_seed.getUint32(ib_offset+9, false);
+
+	// parse depth
+	const i_depth = atu8_node[4];
+	if(0 === i_depth) {
+		if(atu8_parent.every(xb => 0 === xb)) {
+			die(S_INDICATES+'parent fingerprint');
+		}
+		else if(0 !== i_index) {
+			die(S_INDICATES+'non-zero index');
+		}
+	}
+
+	// copy chain out to new buffer
+	const atu8_chain = atu8_node.slice(13, 45);
+
+	if(0 !== atu8_node[45]) {
+		throw new Error(S_INVALID_SEED+'; declares to be public');
+	}
+
+	// copy private key contents out to new buffer
+	const atu8_sk = atu8_node.slice(46, 78);
+
+	// construct node
+	return bip32_create(atu8_sk, atu8_chain, atu8_parent, i_depth, i_index);
+};
+
+/**
+ * Completely destroy all key material
+ */
+export const bip32_destroy = (k_bip32: Bip32Handle): void => {
+	// destructure private fields
+	const [
+		k_sk,
+		atu8_chain,
+		atu8_parent,
+	] = hm_privates.get(k_bip32)!;
+
+	// destory private fields
+	runtime_key_destroy(k_sk);
+	zero_out(atu8_chain);
+	zero_out(atu8_parent);
+
+	// destroy public fields
+	zero_out(k_bip32.id);
+	zero_out(k_bip32.fp);
+	zero_out(k_bip32.pk33);
+
+	// remove from weak map so don't accidentally try to use
+	hm_privates.delete(k_bip32);
+};
+
+/**
+ * Derives a descendant node using the given path
+ * @param k_bip32 
+ * @param s_path 
+ * @returns 
+ */
+export const bip32_derive_from_path = async(k_bip32: Bip32Handle, s_path: string): Promise<Bip32Handle> => {
+	// split path
+	const a_parts = s_path.split('/');
+
+	// master identifier
+	if('m' === a_parts[0]) {
+		// currently on child
+		if(!k_bip32.im) die('Refusing to derive path on child key');
+
+		// remove 'm'
+		a_parts.splice(0, 1);
+	}
+
+	// start with this node
+	let k_node: Bip32Handle = k_bip32;
+
+	// iterate over each part
+	for(const si_part of a_parts) {
+		// hardened derivation
+		if(`'` === si_part.at(-1)) {
+			k_node = await bip32_derive(k_bip32, +si_part.slice(0, -1), 1);
+		}
+		// non-hardened
+		else {
+			k_node = await bip32_derive(k_bip32, +si_part);
+		}
+	}
+
+	// return final node
+	return k_node;
+};
