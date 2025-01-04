@@ -2,10 +2,8 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-sequences */
 import type {NaiveBase93} from '@blake.regalia/belt';
-import type {IHasher} from 'hash-wasm/dist/lib/WASMInterface';
 
-import {die, timeout_exec, MutexPool, base93_to_bytes, bytes, try_async} from '@blake.regalia/belt';
-import {gunzip_bytes} from 'src/compression';
+import {die, timeout_exec, MutexPool, base93_to_bytes, bytes, gunzip_bytes} from '@blake.regalia/belt';
 
 export type ReferenceObject<w_wrapped> = {
 	r?: w_wrapped | undefined;

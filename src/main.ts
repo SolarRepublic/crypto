@@ -3,7 +3,6 @@ export * from './bech32.js';
 export * from './bip32.js';
 export * from './bip39.js';
 export * from './constants.js';
-export * from './compression.js';
 export * from './entropy.js';
 export * from './runtime-key.js';
 export * from './ripemd160.js';

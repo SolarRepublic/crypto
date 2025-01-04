@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@blake.regalia/belt':
-        specifier: ^0.51.0
-        version: 0.51.0(@typescript-eslint/parser@8.19.0(eslint@9.17.0)(typescript@5.7.2))(eslint@9.17.0)(ts-node@10.9.2(@types/node@22.10.3)(typescript@5.7.2))(typescript@5.7.2)
+        specifier: ^0.52.1
+        version: 0.52.1(@typescript-eslint/parser@8.19.0(eslint@9.17.0)(typescript@5.7.2))(eslint@9.17.0)(ts-node@10.9.2(@types/node@22.10.5)(typescript@5.7.2))(typescript@5.7.2)
       '@solar-republic/wasm-secp256k1':
         specifier: ^0.4.2
         version: 0.4.2
@@ -20,7 +20,7 @@ importers:
     devDependencies:
       '@blake.regalia/eslint-config-elite':
         specifier: ^0.5.11
-        version: 0.5.11(@typescript-eslint/parser@8.19.0(eslint@9.17.0)(typescript@5.7.2))(eslint@9.17.0)(ts-node@10.9.2(@types/node@22.10.3)(typescript@5.7.2))(typescript@5.7.2)
+        version: 0.5.11(@typescript-eslint/parser@8.19.0(eslint@9.17.0)(typescript@5.7.2))(eslint@9.17.0)(ts-node@10.9.2(@types/node@22.10.5)(typescript@5.7.2))(typescript@5.7.2)
       '@blake.regalia/tsconfig':
         specifier: ^0.2.0
         version: 0.2.0(typescript@5.7.2)
@@ -34,8 +34,8 @@ importers:
         specifier: ^5.0.1
         version: 5.0.1
       '@types/node':
-        specifier: ^22.10.3
-        version: 22.10.3
+        specifier: ^22.10.5
+        version: 22.10.5
       '@types/web':
         specifier: ^0.0.188
         version: 0.0.188
@@ -62,7 +62,7 @@ importers:
         version: 4.29.1
       ts-node:
         specifier: ^10.9.2
-        version: 10.9.2(@types/node@22.10.3)(typescript@5.7.2)
+        version: 10.9.2(@types/node@22.10.5)(typescript@5.7.2)
       ts-toolbelt:
         specifier: ^9.6.0
         version: 9.6.0
@@ -89,8 +89,8 @@ packages:
   '@blake.regalia/belt@0.48.4':
     resolution: {integrity: sha512-xeLxatQdIMF2YVeNUTE8pJh7RQ/0VrS0AsNXhVMLv3DdRsIbi3rm/a0w7Y7A5evWHNdO+vaXi26rU0wMS9eHcg==}
 
-  '@blake.regalia/belt@0.51.0':
-    resolution: {integrity: sha512-Lo7EGPbisw2jv8fhWZxJZXChRpelOG3K5mAM5SxaYimnnj3ueqopAdCxRZyyxRUXey/59zKx2PdQ5LXCRjISsg==}
+  '@blake.regalia/belt@0.52.1':
+    resolution: {integrity: sha512-6ig47bvGy4jpitQwMHmrrWqfxyCuS7HVBlLbeV6vxgUtHiEZ+Fv1uljzQ1wVp3ArIllpobJPBf0JVr2kGKy94g==}
 
   '@blake.regalia/eslint-config-elite@0.5.11':
     resolution: {integrity: sha512-e3CiYwUCySOrVh2JS/r7dFzQZrHiMxIXd/xpXYZvhIpeCgUgu0C07zdDjM08AezAs26d3Gdej9fBetAXMXA2kA==}
@@ -363,8 +363,8 @@ packages:
   '@types/node@20.12.14':
     resolution: {integrity: sha512-scnD59RpYD91xngrQQLGkE+6UrHUPzeKZWhhjBSa3HSkwjbQc38+q3RoIVEwxQGRw3M+j5hpNAM+lgV3cVormg==}
 
-  '@types/node@22.10.3':
-    resolution: {integrity: sha512-DifAyw4BkrufCILvD3ucnuN8eydUfc/C1GlyrnI+LK6543w5/L3VeVgf05o3B4fqSXP1dKYLOZsKfutpxPzZrw==}
+  '@types/node@22.10.5':
+    resolution: {integrity: sha512-F8Q+SeGimwOo86fiovQh8qiXfFEh2/ocYv7tU5pJ3EXMSSxk1Joj5wefpFK2fHTf/N6HKGSxIDBT9f3gCxXPkQ==}
 
   '@types/semver@7.5.8':
     resolution: {integrity: sha512-I8EUhyrgfLrcTkzV3TSsGyl1tSuPrEDzr0yd5m90UgNxQkyDXULk3b6MlQqTCpZpNtWe1K0hzclnZkTcLBe2UQ==}
@@ -1468,9 +1468,9 @@ snapshots:
 
   '@blake.regalia/belt@0.48.4': {}
 
-  '@blake.regalia/belt@0.51.0(@typescript-eslint/parser@8.19.0(eslint@9.17.0)(typescript@5.7.2))(eslint@9.17.0)(ts-node@10.9.2(@types/node@22.10.3)(typescript@5.7.2))(typescript@5.7.2)':
+  '@blake.regalia/belt@0.52.1(@typescript-eslint/parser@8.19.0(eslint@9.17.0)(typescript@5.7.2))(eslint@9.17.0)(ts-node@10.9.2(@types/node@22.10.5)(typescript@5.7.2))(typescript@5.7.2)':
     dependencies:
-      '@blake.regalia/eslint-config-elite': 0.5.11(@typescript-eslint/parser@8.19.0(eslint@9.17.0)(typescript@5.7.2))(eslint@9.17.0)(ts-node@10.9.2(@types/node@22.10.3)(typescript@5.7.2))(typescript@5.7.2)
+      '@blake.regalia/eslint-config-elite': 0.5.11(@typescript-eslint/parser@8.19.0(eslint@9.17.0)(typescript@5.7.2))(eslint@9.17.0)(ts-node@10.9.2(@types/node@22.10.5)(typescript@5.7.2))(typescript@5.7.2)
       globals: 15.14.0
     transitivePeerDependencies:
       - '@typescript-eslint/parser'
@@ -1481,7 +1481,7 @@ snapshots:
       - ts-node
       - typescript
 
-  '@blake.regalia/eslint-config-elite@0.5.11(@typescript-eslint/parser@8.19.0(eslint@9.17.0)(typescript@5.7.2))(eslint@9.17.0)(ts-node@10.9.2(@types/node@22.10.3)(typescript@5.7.2))(typescript@5.7.2)':
+  '@blake.regalia/eslint-config-elite@0.5.11(@typescript-eslint/parser@8.19.0(eslint@9.17.0)(typescript@5.7.2))(eslint@9.17.0)(ts-node@10.9.2(@types/node@22.10.5)(typescript@5.7.2))(typescript@5.7.2)':
     dependencies:
       '@blake.regalia/belt': 0.48.4
       '@eslint/eslintrc': 3.2.0
@@ -1494,7 +1494,7 @@ snapshots:
       eslint-plugin-modules-newline: 0.0.6
       eslint-plugin-perfectionist: 4.4.0(eslint@9.17.0)(typescript@5.7.2)
       eslint-plugin-sort-keys: 2.3.5
-      eslint-plugin-svelte: 2.46.1(eslint@9.17.0)(svelte@5.16.0)(ts-node@10.9.2(@types/node@22.10.3)(typescript@5.7.2))
+      eslint-plugin-svelte: 2.46.1(eslint@9.17.0)(svelte@5.16.0)(ts-node@10.9.2(@types/node@22.10.5)(typescript@5.7.2))
       eslint-plugin-typescript-sort-keys: 3.3.0(@typescript-eslint/parser@8.19.0(eslint@9.17.0)(typescript@5.7.2))(eslint@9.17.0)(typescript@5.7.2)
       globals: 15.14.0
       svelte: 5.16.0
@@ -1731,7 +1731,7 @@ snapshots:
     dependencies:
       undici-types: 5.26.5
 
-  '@types/node@22.10.3':
+  '@types/node@22.10.5':
     dependencies:
       undici-types: 6.20.0
 
@@ -1741,7 +1741,7 @@ snapshots:
 
   '@types/ws@8.5.13':
     dependencies:
-      '@types/node': 22.10.3
+      '@types/node': 22.10.5
 
   '@typescript-eslint/eslint-plugin@8.18.2(@typescript-eslint/parser@8.18.2(eslint@9.17.0)(typescript@5.7.2))(eslint@9.17.0)(typescript@5.7.2)':
     dependencies:
@@ -2208,7 +2208,7 @@ snapshots:
     dependencies:
       natural-compare: 1.4.0
 
-  eslint-plugin-svelte@2.46.1(eslint@9.17.0)(svelte@5.16.0)(ts-node@10.9.2(@types/node@22.10.3)(typescript@5.7.2)):
+  eslint-plugin-svelte@2.46.1(eslint@9.17.0)(svelte@5.16.0)(ts-node@10.9.2(@types/node@22.10.5)(typescript@5.7.2)):
     dependencies:
       '@eslint-community/eslint-utils': 4.4.0(eslint@9.17.0)
       '@jridgewell/sourcemap-codec': 1.5.0
@@ -2217,7 +2217,7 @@ snapshots:
       esutils: 2.0.3
       known-css-properties: 0.35.0
       postcss: 8.4.49
-      postcss-load-config: 3.1.4(postcss@8.4.49)(ts-node@10.9.2(@types/node@22.10.3)(typescript@5.7.2))
+      postcss-load-config: 3.1.4(postcss@8.4.49)(ts-node@10.9.2(@types/node@22.10.5)(typescript@5.7.2))
       postcss-safe-parser: 6.0.0(postcss@8.4.49)
       postcss-selector-parser: 6.1.2
       semver: 7.6.3
@@ -2633,13 +2633,13 @@ snapshots:
 
   picomatch@4.0.2: {}
 
-  postcss-load-config@3.1.4(postcss@8.4.49)(ts-node@10.9.2(@types/node@22.10.3)(typescript@5.7.2)):
+  postcss-load-config@3.1.4(postcss@8.4.49)(ts-node@10.9.2(@types/node@22.10.5)(typescript@5.7.2)):
     dependencies:
       lilconfig: 2.1.0
       yaml: 1.10.2
     optionalDependencies:
       postcss: 8.4.49
-      ts-node: 10.9.2(@types/node@22.10.3)(typescript@5.7.2)
+      ts-node: 10.9.2(@types/node@22.10.5)(typescript@5.7.2)
 
   postcss-safe-parser@6.0.0(postcss@8.4.49):
     dependencies:
@@ -2818,14 +2818,14 @@ snapshots:
     dependencies:
       typescript: 5.7.2
 
-  ts-node@10.9.2(@types/node@22.10.3)(typescript@5.7.2):
+  ts-node@10.9.2(@types/node@22.10.5)(typescript@5.7.2):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       '@tsconfig/node10': 1.0.10
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
-      '@types/node': 22.10.3
+      '@types/node': 22.10.5
       acorn: 8.11.3
       acorn-walk: 8.3.2
       arg: 4.1.3
