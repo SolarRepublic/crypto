@@ -29,7 +29,7 @@ export async function aes_gcm_encrypt(
 			iv: atu8_nonce,
 			additionalData: atu8_verify,
 			tagLength: ni_tag,
-		}, dk_key, atu8_data) as Uint8Array);
+		}, dk_key, atu8_data));
 	}
 	catch(e_encrypt) {
 		throw new AesGcmEncryptionError(e_encrypt as Error);
@@ -49,7 +49,7 @@ export async function aes_gcm_decrypt(
 			iv: atu8_nonce,
 			additionalData: atu8_verify,
 			tagLength: ni_tag,
-		}, dk_key, atu8_data) as Uint8Array);
+		}, dk_key, atu8_data));
 	}
 	catch(e_decrypt) {
 		throw new AesGcmDecryptionError(e_decrypt as Error);

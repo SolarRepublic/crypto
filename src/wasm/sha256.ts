@@ -4,12 +4,12 @@ import {die, timeout_exec} from '@blake.regalia/belt';
 
 let y_sha256: IHasher;
 
-export const sha256_wasm_load = async(xt_wait=Infinity): Promise<IHasher> => y_sha256
+export const sha256_sync_wasm_load = async(xt_wait=Infinity): Promise<IHasher> => y_sha256
 	?? await timeout_exec(xt_wait, async() => (await import('hash-wasm/dist/lib/sha256')).createSHA256())
 		.then(([y_hasher]) => y_sha256 = y_hasher!)
 	?? die('Failed to load SHA-256 WASM module');
 
-export const sha256_wasm = (atu8_data: Uint8Array): Uint8Array => y_sha256?.init().update(atu8_data).digest('binary')
+export const sha256_sync_wasm = (atu8_data: Uint8Array): Uint8Array => y_sha256?.init().update(atu8_data).digest('binary')
 	?? die('SHA-256 WASM module not ready or failed to load');
 
 

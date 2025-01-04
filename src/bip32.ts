@@ -1,11 +1,10 @@
 import type {KeyProducer, RuntimeKeyHandle} from './runtime-key';
 import type {NaiveBase58} from '@blake.regalia/belt';
 
-
 import {bytes, bytes_to_base58, concat2, dataview, die, hmac, sha256, subtle_import_key, subtle_sign, text_to_bytes, zero_out} from '@blake.regalia/belt';
 
-import {ripemd160_any_sync} from './ripemd160';
-import {resolve_key_producer, runtime_key_access, runtime_key_create, runtime_key_destroy} from './runtime-key';
+import {ripemd160_sync_any} from './ripemd160';
+import {key_producer_resolve, runtime_key_access, runtime_key_create, runtime_key_destroy} from './runtime-key';
 import {secp256k1_sk_to_pk, secp256k1_tweak_sk_add, secp256k1_valid_sk} from './secp256k1';
 import {HM_PRIVATES} from './util';
 
@@ -33,7 +32,7 @@ export type Bip32Handle = {
 	/**
 	 * is the master node?
 	 */
-	im: boolean;
+	mn: boolean;
 
 	/**
 	 * 33-byte public key
@@ -92,13 +91,13 @@ export const bip32_create = async(
 	const atu8_pk33 = await runtime_key_access(k_sk, secp256k1_sk_to_pk);
 
 	// create the identifier
-	const atu8_id = ripemd160_any_sync(atu8_pk33);
+	const atu8_id = ripemd160_sync_any(atu8_pk33);
 
 	// create instance
 	const k_bip32: Bip32Handle = {
 		id: atu8_id,
 		fp: atu8_id.subarray(0, 4),
-		im: atu8_parent.every(xb => 0 === xb),
+		mn: atu8_parent.every(xb => 0 === xb),
 		pk33: atu8_pk33,
 		d: i_depth,
 	};
@@ -120,7 +119,7 @@ export const bip32_create = async(
  */
 export const bip32_from_master = async(z_seed: KeyProducer): Promise<Bip32Handle> => {
 	// create seed
-	const atu8_seed = await resolve_key_producer(z_seed);
+	const atu8_seed = await key_producer_resolve(z_seed);
 
 	// safety checks
 	{
@@ -229,6 +228,11 @@ export const bip32_export_base58 = async(k_bip32: Bip32Handle): Promise<NaiveBas
 	// serialize to base58
 	return bytes_to_base58(atu8_data);
 };
+
+/**
+ * Exports the given BIP-32 node's private key
+ */
+export const bip32_export = (k_bip32: Bip32Handle): RuntimeKeyHandle => hm_privates.get(k_bip32)![0];
 
 /**
  * <https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#child-key-derivation-ckd-functions>
@@ -407,7 +411,7 @@ export const bip32_derive_from_path = async(k_bip32: Bip32Handle, s_path: string
 	// master identifier
 	if('m' === a_parts[0]) {
 		// currently on child
-		if(!k_bip32.im) die('Refusing to derive path on child key');
+		if(!k_bip32.mn) die('Refusing to derive path on child key');
 
 		// remove 'm'
 		a_parts.splice(0, 1);

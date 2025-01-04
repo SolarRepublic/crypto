@@ -16,6 +16,10 @@
 	},
 
 	"include": [
-		"src/**/*.ts", "scrap/bip44.ts",
+		"src/**/*.ts",
+		"plugins/**/*.ts",
+		"resource/**/*",
+		"rollup.config.ts",
+		"global.d.ts",
 	],
 }

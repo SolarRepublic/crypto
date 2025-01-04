@@ -3,10 +3,10 @@ import type {NaiveBase64, Nilable} from '@blake.regalia/belt';
 
 import type {CwAccountAddr} from '@solar-republic/types';
 
-import {__UNDEFINED, base64_to_bytes, die} from '@blake.regalia/belt';
+import {__UNDEFINED, base64_to_bytes, die, is_bytes, is_string} from '@blake.regalia/belt';
 
-import {ripemd160_any_sync} from './ripemd160.js';
-import {sha256_sync} from './wasm/sha256.js';
+import {ripemd160_sync_any} from './ripemd160.js';
+import {sha256_sync_any} from './sha256.js';
 
 const SX_ALPHABET = 'qpzry9x8gf2tvdw0s3jn54khce6mua7l';
 
@@ -65,16 +65,17 @@ const regroup_bits = (a_words: Iterable<number>, ni_in: number, ni_out: number, 
 export const pubkey_to_bech32 = <
 	si_hrp extends string,
 >(z_pubkey: NaiveBase64 | Uint8Array, si_hrp: si_hrp): CwAccountAddr<si_hrp> => {
-	const atu8_pk = 'string' === typeof z_pubkey? base64_to_bytes(z_pubkey): z_pubkey;
-	if(!(atu8_pk instanceof Uint8Array)) {
-		throw TypeError(`Pubkey argument must be a Uint8Array or base64-encoded string`);
-	}
+	// normalize public key argument
+	const atu8_pk = is_string(z_pubkey)? base64_to_bytes(z_pubkey): z_pubkey;
+
+	// invalid format
+	if(!is_bytes(atu8_pk)) throw TypeError(`Pubkey argument must be a Uint8Array or base64-encoded string`);
 
 	// perform sha-256 hashing on the public key
-	const atu8_sha256 = sha256_sync(atu8_pk);
+	const atu8_sha256 = sha256_sync_any(atu8_pk);
 
 	// perform ripemd-160 hashing on the result
-	const atu8_ripemd160 = ripemd160_any_sync(atu8_sha256);
+	const atu8_ripemd160 = ripemd160_sync_any(atu8_sha256);
 
 	// convert to bech32 string
 	return bech32_encode(si_hrp, atu8_ripemd160);
@@ -82,9 +83,9 @@ export const pubkey_to_bech32 = <
 
 
 // option A
-// eslint-disable-next-line @typescript-eslint/naming-convention
+
 /**
- * Encode an address in bech32 format
+ * Encode address data in bech32 format
  * @param si_hrp - the human-readable part without the '1' separator
  * @param atu8_data - canonical addr data
  * @returns 
@@ -135,7 +136,6 @@ export const bech32_encode = <
 // 	), sa_output);
 // };
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export const bech32_decode = <
 	sa_defined extends string,
 >(sa_bech32: Nilable<sa_defined>): Uint8Array | PropagateUndefined<sa_defined> => {

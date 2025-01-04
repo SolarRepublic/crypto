@@ -1,4 +1,4 @@
-import {assign, bytes, crypto_random_bytes, die, is_bytes, is_function, subtle_derive_bits, subtle_import_key, zero_out} from '@blake.regalia/belt';
+import {assign, bytes, crypto_random_bytes, die, is_function, subtle_derive_bits, subtle_import_key, zero_out} from '@blake.regalia/belt';
 
 import {HM_PRIVATES, random_bytes} from './util.js';
 
@@ -24,7 +24,12 @@ type RuntimePrivateKeyFields = [
  * @param z_key 
  * @returns 
  */
-export const resolve_key_producer = async(z_key: KeyProducer): Promise<Uint8Array> => is_function(z_key)? await z_key(): is_bytes(z_key)? z_key: die('Invalid key producer', z_key);
+export const key_producer_resolve = async<w_key extends ArrayBufferView>(
+	z_key: KeyProducer<w_key>
+): Promise<w_key> => ArrayBuffer.isView(z_key)
+	? z_key: is_function(z_key)
+		? await z_key()
+		: die('Invalid key producer', z_key);
 
 /**
  * Fetch a derived key deterministically given some salt and optional info.
@@ -99,7 +104,7 @@ async function generate_pair(zk_sk: KeyProducer, atu8_salt: Uint8Array, ni_bits=
 	const atu8_derived = await fetch_derived(dk_base, atu8_salt, ni_bits);
 
 	// fetch private key
-	const atu8_sk = await resolve_key_producer(zk_sk);
+	const atu8_sk = await key_producer_resolve(zk_sk);
 
 	// compute the delta key
 	const atu8_xor = xor_bytes(atu8_derived, atu8_sk);
@@ -160,7 +165,7 @@ export const runtime_key_create = async(zk_sk: KeyProducer, ni_bits=256): Promis
 export const runtime_key_access = async<w_return=unknown>(
 	k_key: RuntimeKeyHandle,
 	fk_use: (atu8_sk: Uint8Array) => w_return
-) => {
+): Promise<w_return> => {
 	// ref and destructure private fields
 	const [atu8_salt, ni_bits, dk_base, atu8_xor] = hm_privates.get(k_key)!;
 
@@ -212,12 +217,12 @@ export const runtime_key_access = async<w_return=unknown>(
 
 	// emulate whatever the callback did
 	if(e_thrown) {
-		throw e_thrown;  // eslint-disable-line @typescript-eslint/no-throw-literal
+		throw e_thrown;  // eslint-disable-line @typescript-eslint/only-throw-error
 	}
 	// return whatever the caller returned
 	else {
 		// resolve it first
-		const w_resolved = await w_return;  // eslint-disable-line @typescript-eslint/await-thenable
+		const w_resolved = await w_return;
 
 		// wipe the used key
 		zero_out(atu8_use);
@@ -231,7 +236,7 @@ export const runtime_key_access = async<w_return=unknown>(
  * Destroy the private data stored in the runtime key instance
  * @param k_key 
  */
-export const runtime_key_destroy = (k_key: RuntimeKeyHandle) => {
+export const runtime_key_destroy = (k_key: RuntimeKeyHandle): void => {
 	// destructure fields
 	const [atu8_salt,,, atu8_xor] = hm_privates.get(k_key)!;
 
@@ -250,4 +255,4 @@ export const runtime_key_destroy = (k_key: RuntimeKeyHandle) => {
  * @param k_key 
  * @returns 
  */
-export const runtime_key_clone = async(k_key: RuntimeKeyHandle) => await runtime_key_access(k_key, atu8_sk => runtime_key_create(() => atu8_sk.slice()));
+export const runtime_key_clone = async(k_key: RuntimeKeyHandle): Promise<RuntimeKeyHandle> => await runtime_key_access(k_key, atu8_sk => runtime_key_create(() => atu8_sk.slice()));

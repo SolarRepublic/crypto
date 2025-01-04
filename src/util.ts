@@ -1,6 +1,6 @@
 import {bytes} from '@blake.regalia/belt';
 
-export const HM_PRIVATES = new WeakMap<any, any>() as WeakMap<any, any> & {
+export const HM_PRIVATES = new WeakMap() as WeakMap<any, any> & {
 	get<w_return>(w_key: any): w_return;
 };
 

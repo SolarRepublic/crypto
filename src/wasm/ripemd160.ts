@@ -1,4 +1,4 @@
-import type {HasherReferenceObject} from './_hash';
+// import type {HasherReferenceObject} from './_hash';
 
 import {bytes_to_hex, text_to_bytes} from '@blake.regalia/belt';
 
@@ -6,7 +6,7 @@ import {hasher_loader} from './_hash';
 
 // let y_ripemd160: IHasher;
 
-const g_ref: HasherReferenceObject = {};
+// const g_ref: HasherReferenceObject = {};
 
 // export const ripemd160_wasm_load = async(xt_wait=Infinity): Promise<IHasher> => y_ripemd160
 // 	?? await timeout_exec(xt_wait, async() => (await import('hash-wasm/dist/lib/ripemd160')).createRIPEMD160())
@@ -23,11 +23,13 @@ const g_ref: HasherReferenceObject = {};
 // export const ripemd160_wasm = (atu8_data: Uint8Array): Uint8Array => y_ripemd160?.init().update(atu8_data).digest('binary')
 // 	?? die('RIPEMD-160 WASM module not ready or failed to load');
 
-export const [ripemd160_wasm_load, ripemd160_wasm] = hasher_loader(g_ref, 'ripemd160');
+export const [ripemd160_wasm_load, ripemd160_wasm] = hasher_loader('ripemd160', 20);
 
 await ripemd160_wasm_load(2e3);
 
 console.log(bytes_to_hex(ripemd160_wasm(text_to_bytes('tes1t'))));
+
+
 
 console.log('ok');
 

@@ -1,5 +1,7 @@
 import {argon2id} from 'hash-wasm';
 
+import {hasher_loader} from './_hash';
+
 
 export type Argon2idConfig = {
 	phrase: Uint8Array;
@@ -8,6 +10,15 @@ export type Argon2idConfig = {
 	memory?: number;
 	parallelism?: number;
 	hashLen?: number;
+};
+
+
+const [argon2id_wasm_load, argon2id_wasm] = hasher_loader('argon2id', 20);
+
+export {argon2id_wasm_load};
+
+export const argon2id_wasm_hash = () => {
+
 };
 
 export async function argon2id_hash(gc_argon: Argon2idConfig): Promise<Uint8Array> {
