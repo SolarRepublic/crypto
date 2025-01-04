@@ -23,15 +23,15 @@ import {hasher_loader} from './_hash';
 // export const ripemd160_wasm = (atu8_data: Uint8Array): Uint8Array => y_ripemd160?.init().update(atu8_data).digest('binary')
 // 	?? die('RIPEMD-160 WASM module not ready or failed to load');
 
-export const [ripemd160_wasm_load, ripemd160_wasm] = hasher_loader('ripemd160', 20);
+// export const [ripemd160_wasm_load, ripemd160_wasm] = hasher_loader('ripemd160', 20);
 
-await ripemd160_wasm_load(2e3);
+// await ripemd160_wasm_load(2e3);
 
-console.log(bytes_to_hex(ripemd160_wasm(text_to_bytes('tes1t'))));
+// console.log(bytes_to_hex(ripemd160_wasm(text_to_bytes('tes1t'))));
 
 
 
-console.log('ok');
+// console.log('ok');
 
 // export const ripemd160_wasm = () => {};
 

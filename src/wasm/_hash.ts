@@ -43,16 +43,6 @@ const NB_MAX_HEAP = 16 * 1024;  // 16 KiB
 
 const km_wasm = MutexPool(1);
 
-// export const load_wasm = async(s_package: string) => [
-// 	const j = await try_async(() => instantiate_wasm(
-// 		(await import(`./${s_package}-wasm.ts`)).default,
-// 	));
-// ];
-
-// new Response(atu8).body.pipeThrough;
-// new Blob([atu8]).stream().pipeThrough
-
-// const bytes_to_readable_stream = (atu8: Uint8Array) => new Blob([atu8]).stream();
 const import_resource = async(s_package: string, s_type: string) => base93_to_bytes(
 	(await import(`./${s_package}${s_type}.ts`)).default as NaiveBase93
 );
