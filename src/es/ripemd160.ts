@@ -1,4 +1,4 @@
-import {array_fill, base93_to_bytes, bytes, dataview, dataview_from} from '@blake.regalia/belt';
+import {array_fill, base93_to_bytes, bytes, dataview_from} from '@blake.regalia/belt';
 
 import {hash_finalize, hash_update} from './_hash';
 import {rotl_32} from './nist';

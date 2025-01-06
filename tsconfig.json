@@ -9,17 +9,11 @@
 		"declaration": true,
 		"noImplicitReturns": false,
 
-		"allowJs": false,
-
 		"module": "ESNext",
-		"moduleResolution": "Bundler"
+		"moduleResolution": "Bundler",
 	},
 
 	"include": [
 		"src/**/*.ts",
-		"plugins/**/*.ts",
-		"resource/**/*",
-		"rollup.config.ts",
-		"global.d.ts",
 	],
 }

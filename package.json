@@ -28,9 +28,14 @@
   },
   "scripts": {
     "clean": "rm -rf dist/*",
-    "build": "tsc -p tsconfig.mjs.json && tsc-esm-fix --target='dist'",
-    "buildx": "rollup --config rollup.config.ts --configPlugin @rollup/plugin-typescript",
-    "test": "node --loader ts-node/esm",
+    "build-bip39-wordlist-english": "node ./gen/bip39-wordlist-english.mjs > ./src/bip39-wordlist-english.ts",
+    "build-wasm-hash": "mkdir -p ./src/wasm/bytecode && node ./gen/wasm-hash.mjs ${hash} > ./src/wasm/bytecode/${hash}.wasm.gz.ts",
+    "build-wasm-hash:ripemd160": "hash=ripemd160 pnpm run build-wasm-hash",
+    "build-wasm-hash:sha256": "hash=sha256 pnpm run build-wasm-hash",
+    "build-wasm-hash:sha3": "hash=sha3 pnpm run build-wasm-hash",
+    "build-wasm-hash:all": "pnpm run build-wasm-hash:ripemd160 && pnpm run build-wasm-hash:sha256 && pnpm run build-wasm-hash:sha3",
+    "build:tsc": "tsc -p tsconfig.mjs.json && tsc-esm-fix --target='dist'",
+    "build": "pnpm run build-bip39-wordlist-english && pnpm run build-wasm-hash:all && pnpm run build:tsc",
     "test:all": "pnpm run test test/**.ts",
     "debug": "node --inspect-brk --loader ts-node/esm"
   },
@@ -55,8 +60,8 @@
     "typescript": "^5.7.2"
   },
   "dependencies": {
-    "@blake.regalia/belt": "^0.52.1",
-    "@solar-republic/wasm-secp256k1": "^0.4.2",
+    "@blake.regalia/belt": "^0.52.2",
+    "@solar-republic/wasm-secp256k1": "0.5.0",
     "hash-wasm": "^4.12.0"
   },
   "publishConfig": {

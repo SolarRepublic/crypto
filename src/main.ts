@@ -12,5 +12,6 @@ export * from './util.js';
 
 export * from './wasm/ripemd160.js';
 export * from './wasm/sha256.js';
+export * from './wasm/keccak256.js';
 
 export * from './bip39-wordlist-english.js';

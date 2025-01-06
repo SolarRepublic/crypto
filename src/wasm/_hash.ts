@@ -9,20 +9,6 @@ export type ReferenceObject<w_wrapped> = {
 	r?: w_wrapped | undefined;
 };
 
-// export const hasher_loader = (
-// 	s_package: string,
-// 	g_ref: HasherReferenceObject={},
-// 	s_export=s_package.toUpperCase()
-// ) => [
-// 	async(xt_wait=Infinity): Promise<IHasher> => g_ref.r
-// 		?? await timeout_exec(xt_wait, async() => (await import('./'+s_package+''))['create'+s_export]())
-// 			.then(([y_hasher]) => g_ref.r = y_hasher!)
-// 		?? die(`Failed to load ${s_export} WASM module`),
-// 	(atu8_data: Uint8Array) => g_ref.r?.init().update(atu8_data).digest('binary')
-// 		?? die(s_export+' WASM module not ready or failed to load'),
-// ] as const;
-
-
 export type Hasher = {
 	i(_?: never): Hasher;
 	u(atu8_data: Uint8Array): Hasher;
@@ -44,14 +30,15 @@ const NB_MAX_HEAP = 16 * 1024;  // 16 KiB
 const km_wasm = MutexPool(1);
 
 const import_resource = async(s_package: string, s_type: string) => base93_to_bytes(
-	(await import(`./${s_package}${s_type}.ts`)).default as NaiveBase93
+	(await import(`./bytecode/${s_package}${s_type}.ts`)).default as NaiveBase93
 );
 
 export const hasher_loader = (
 	s_package: string,
 	nb_digest: number,
 	g_ref: HasherReferenceObject={},
-	s_export=s_package.toUpperCase()
+	s_export=s_package.toUpperCase(),
+	nb_padding?: number
 ) => [
 	// explicit loader
 	async(xt_wait=Infinity): Promise<Hasher> => g_ref.r
@@ -66,7 +53,7 @@ export const hasher_loader = (
 		?? die(`Failed to load ${s_export} WASM module`),
 
 	// hasher function
-	(atu8_data: Uint8Array) => g_ref.r?.i().u(atu8_data).d()
+	(atu8_data: Uint8Array) => g_ref.r?.i().u(atu8_data).d(nb_padding)
 		?? die(s_export+' WASM module not ready or failed to load'),
 ] as const;
 
