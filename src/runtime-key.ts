@@ -1,4 +1,4 @@
-import {assign, bytes, crypto_random_bytes, die, is_function, subtle_derive_bits, subtle_import_key, zero_out} from '@blake.regalia/belt';
+import {assign, bytes, crypto_random_bytes, die, is_function, subtle_derive_bits, subtle_import_key, zeroize} from '@blake.regalia/belt';
 
 import {HM_PRIVATES, random_bytes} from './util.js';
 
@@ -98,7 +98,7 @@ async function generate_pair(zk_sk: KeyProducer, atu8_salt: Uint8Array, ni_bits=
 	}, false, ['deriveBits']);
 
 	// wipe the base key from memory
-	zero_out(atu8_otp);
+	zeroize(atu8_otp);
 
 	// fetch the 'one-time pad' key
 	const atu8_derived = await fetch_derived(dk_base, atu8_salt, ni_bits);
@@ -110,10 +110,10 @@ async function generate_pair(zk_sk: KeyProducer, atu8_salt: Uint8Array, ni_bits=
 	const atu8_xor = xor_bytes(atu8_derived, atu8_sk);
 
 	// wipe the private key from memory
-	zero_out(atu8_sk);
+	zeroize(atu8_sk);
 
 	// wipe the derived key from memory
-	zero_out(atu8_derived);
+	zeroize(atu8_derived);
 
 	// return the base key and one-time pad key
 	return [dk_base, atu8_xor];
@@ -185,7 +185,7 @@ export const runtime_key_access = async<w_return=unknown>(
 		const atu8_sk = xor_bytes(atu8_xor, atu8_derived);
 
 		// wipe the derived key
-		zero_out(atu8_derived);
+		zeroize(atu8_derived);
 
 		// copy the key for use
 		atu8_use = atu8_sk.slice();
@@ -200,7 +200,7 @@ export const runtime_key_access = async<w_return=unknown>(
 			e_thrown = _e_thrown;
 
 			// immediately wipe the use buffer
-			zero_out(atu8_use);
+			zeroize(atu8_use);
 		}
 
 		// callback generate pair
@@ -208,7 +208,7 @@ export const runtime_key_access = async<w_return=unknown>(
 
 		// then wipe the private key (redundant because of call to generate pair)
 		queueMicrotask(() => {
-			zero_out(atu8_sk);
+			zeroize(atu8_sk);
 		});
 	}), atu8_salt, ni_bits);
 
@@ -225,7 +225,7 @@ export const runtime_key_access = async<w_return=unknown>(
 		const w_resolved = await w_return;
 
 		// wipe the used key
-		zero_out(atu8_use);
+		zeroize(atu8_use);
 
 		// return resolved value
 		return w_resolved;
@@ -241,10 +241,10 @@ export const runtime_key_destroy = (k_key: RuntimeKeyHandle): void => {
 	const [atu8_salt,,, atu8_xor] = hm_privates.get(k_key)!;
 
 	// remove otp
-	zero_out(atu8_xor);
+	zeroize(atu8_xor);
 
 	// clear salt
-	zero_out(atu8_salt);
+	zeroize(atu8_salt);
 
 	// remove pointer
 	hm_privates.delete(k_key);

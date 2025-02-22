@@ -1,6 +1,8 @@
 import type {RuntimeKeyHandle} from './runtime-key';
 
-import {ATU8_NIL, bytes, bytes_split, bytes_to_text, concat2, crypto_random_bytes, die, fold, sha256, subtle_derive_bits, subtle_import_key, text_to_bytes, zero_out, type Subtype} from '@blake.regalia/belt';
+import type {Subtype} from '@blake.regalia/belt';
+
+import {ATU8_NIL, bytes, bytes_split, bytes_to_text, concat, concat2, crypto_random_bytes, die, fold, sha256, subtle_derive_bits, subtle_import_key, text_to_bytes, zeroize} from '@blake.regalia/belt';
 
 
 /**
@@ -138,7 +140,7 @@ export const bip39_mnemonic_to_seed = async(
 	const dk_mnemonic = await subtle_import_key('raw', atu8_mnemonic, 'PBKDF2', false, ['deriveBits']);
 
 	// destroy mnemonic
-	zero_out(atu8_mnemonic);
+	zeroize(atu8_mnemonic);
 
 	// derive 512-bits
 	const atu8_derived = bytes(await subtle_derive_bits({
@@ -205,6 +207,7 @@ export const bip39_mnemonic_to_seed = async(
 
 /**
  * Parses a mnemonic string into bytes, canonicalizing it as necessary
+ * @param s_mnemonic - the mnemonic to parse/encode
  */
 export const bip39_mnemonic_parse = (
 	s_mnemonic: string
@@ -212,11 +215,42 @@ export const bip39_mnemonic_parse = (
 
 /**
  * Parses a passphrase string into bytes, normalizing the encoding
+ * @param s_passphrase - the passphrase to parse/encode
  */
 export const bip39_passphrase_parse = (
 	s_passphrase: string
 ): Uint8Array => text_to_bytes(s_passphrase.normalize('NFKD'));
 
+/**
+ * Convert an indicies list into mnemonic bytes using a given wordlist
+ * @param atu16_indicies 
+ * @param a_wordlist 
+ * @returns 
+ */
+export const bip39_indicies_to_mnemonic = (
+	atu16_indicies: DestroyableUint16Array,
+	a_wordlist: string[]
+): DestroyableBytes => {
+	// prep list of words
+	const a_words: Uint8Array[] = [];
+
+	// each index
+	for(const i_index of atu16_indicies) {
+		// add word and trailing space separator to list of bytes (string is already normalized)
+		a_words.push(
+			text_to_bytes(a_wordlist[i_index]+' ')
+		);
+	}
+
+	// create mnemonic
+	const atu8_mnemonic = concat(a_words);
+
+	// zeroize original words
+	for(const atu8_word of a_words) zeroize(atu8_word);
+
+	// return mnemonic bytes as destroyable
+	return atu8_mnemonic as DestroyableBytes;
+};
 
 /**
  * Validate the given expanded form bytes, verifying the terminal checksum byte
@@ -242,7 +276,7 @@ export const bip39_expanded_validate = async(
 	const b_valid = (atu8_hash[0] & xm_checksum) === (atu8_expanded[nb_entropy] & xm_checksum);
 
 	// zero out hash
-	zero_out(atu8_hash);
+	zeroize(atu8_hash);
 
 	// return validity
 	return b_valid;
@@ -272,8 +306,8 @@ export const bip39_entropy_to_expanded = async(
 	const atu8_concat = concat2(atu8_entropy, Uint8Array.from([xb_checksum]));
 
 	// destroy sensitive key material
-	zero_out(atu8_entropy);
-	zero_out(atu8_hash);
+	zeroize(atu8_entropy);
+	zeroize(atu8_hash);
 
 	// return expanded form
 	return atu8_concat;
@@ -305,10 +339,10 @@ export const bip39_mnemonic_to_indicies = (
 	// intercept any errors
 	finally {
 		// destroy mnemonic
-		zero_out(atu8_mnemonic);
+		zeroize(atu8_mnemonic);
 
 		// destroy indicies
-		zero_out(atu16_indicies);
+		zeroize(atu16_indicies);
 	}
 };
 
@@ -339,7 +373,7 @@ export const bip39_expanded_to_indicies = async(
 		const xb_checksum = atu8_hash[0] & xm_checksum;
 
 		// zero out hash
-		zero_out(atu8_hash);
+		zeroize(atu8_hash);
 
 		// bad checksum
 		if(xb_checksum !== (atu8_expanded[nb_entropy] & xm_checksum)) die(`Invalid BIP-39 checksum`);
@@ -350,7 +384,7 @@ export const bip39_expanded_to_indicies = async(
 		const atu16_range_2 = concated_bits_to_indicies(atu8_expanded.subarray(22, 33));
 
 		// wipe expanded data now
-		zero_out(atu8_expanded);
+		zeroize(atu8_expanded);
 
 		// build contiguous indicies buffer
 		const atu16_indicies = Uint16Array.from([
@@ -360,16 +394,16 @@ export const bip39_expanded_to_indicies = async(
 		]);
 
 		// zero out ranges
-		zero_out(atu16_range_0);
-		zero_out(atu16_range_1);
-		zero_out(atu16_range_2);
+		zeroize(atu16_range_0);
+		zeroize(atu16_range_1);
+		zeroize(atu16_range_2);
 
 		// return indicies
 		return atu16_indicies.subarray(0, g_length.snt);
 	}
 	// destroy sensitive key material
 	finally {
-		zero_out(atu8_expanded);
+		zeroize(atu8_expanded);
 	}
 };
 
@@ -390,7 +424,7 @@ export const bip39_entropy_to_indicies = async(
 	}
 	// wipe intermediate expanded form
 	finally {
-		zero_out(atu8_expanded);
+		zeroize(atu8_expanded);
 	}
 };
 
@@ -407,7 +441,7 @@ export const bip39_indicies_to_expanded = (
 
 	// invalid word length; panic wipe and throw
 	if(0 !== nl_words % 3) {
-		zero_out(atu16_indicies);
+		zeroize(atu16_indicies);
 		die('Mnemonic word count is not a multiple of 3');
 	}
 
@@ -501,10 +535,10 @@ export const bip39_indicies_to_expanded = (
 	// intercept any errors
 	finally {
 		// wipe the indicies
-		zero_out(atu16_indicies);
+		zeroize(atu16_indicies);
 
 		// zero out any entropy that was partially decoded
-		zero_out(atu8_entropy);
+		zeroize(atu8_entropy);
 	}
 
 	return atu8_entropy;
@@ -544,7 +578,7 @@ export const bip39_mnemonic_to_entropy = (
 		}
 		// wipe expanded bytes
 		finally {
-			zero_out(atu8_expanded);
+			zeroize(atu8_expanded);
 		}
 	}, ni_entropy);
 };

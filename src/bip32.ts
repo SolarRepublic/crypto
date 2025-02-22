@@ -1,7 +1,7 @@
 import type {KeyProducer, RuntimeKeyHandle} from './runtime-key';
 import type {NaiveBase58} from '@blake.regalia/belt';
 
-import {bytes, bytes_to_base58, concat2, dataview, die, hmac, sha256, subtle_import_key, subtle_sign, text_to_bytes, zero_out} from '@blake.regalia/belt';
+import {bytes, bytes_to_base58, concat2, dataview, die, hmac, sha256, subtle_import_key, subtle_sign, text_to_bytes, zeroize} from '@blake.regalia/belt';
 
 import {ripemd160_sync_any} from './ripemd160';
 import {key_producer_resolve, runtime_key_access, runtime_key_create, runtime_key_destroy} from './runtime-key';
@@ -126,13 +126,13 @@ export const bip32_from_master = async(z_seed: KeyProducer): Promise<Bip32Handle
 		// seed too short
 		if(atu8_seed.byteLength < 16) {
 			// panic wipe
-			zero_out(atu8_seed);
+			zeroize(atu8_seed);
 			die('Seed is too short');
 		}
 		// seed too long
 		else if(atu8_seed.byteLength > 64) {
 			// panic wipe
-			zero_out(atu8_seed);
+			zeroize(atu8_seed);
 			die('Seed is too long');
 		}
 	}
@@ -141,7 +141,7 @@ export const bip32_from_master = async(z_seed: KeyProducer): Promise<Bip32Handle
 	const atu8_i = bytes(await subtle_sign('HMAC', DK_BIP32_KEY_MASTER_GEN, atu8_seed));
 
 	// wipe
-	zero_out(atu8_seed);
+	zeroize(atu8_seed);
 
 	// split into two 32-byte sequences `I_L` and `I_R`
 	const atu8_il = atu8_i.subarray(0, 32);
@@ -150,7 +150,7 @@ export const bip32_from_master = async(z_seed: KeyProducer): Promise<Bip32Handle
 	// invalid master secret key
 	if(!secp256k1_valid_sk(atu8_il)) {
 		// panic wipe
-		zero_out(atu8_i);
+		zeroize(atu8_i);
 		die('Invalid master key');
 	}
 
@@ -223,7 +223,7 @@ export const bip32_export_base58 = async(k_bip32: Bip32Handle): Promise<NaiveBas
 	const atu8_data = concat2(atu8_serialized, atu8_hash.subarray(0, 4));
 
 	// wipe secret material
-	zero_out(atu8_serialized);
+	zeroize(atu8_serialized);
 
 	// serialize to base58
 	return bytes_to_base58(atu8_data);
@@ -281,7 +281,7 @@ export const bip32_derive = async(
 	const atu8_i = await hmac(atu8_chain, atu8_data, 'SHA-512');
 
 	// clean up intermediate data
-	zero_out(atu8_data);
+	zeroize(atu8_data);
 
 	// > Split I into two 32-byte sequences, IL and IR.
 	const atu8_il = atu8_i.subarray(0, 32);
@@ -290,7 +290,7 @@ export const bip32_derive = async(
 	// > In case parse256(IL) ≥ n or ki = 0
 	if(!secp256k1_valid_sk(atu8_il)) {
 		// panic wipe
-		zero_out(atu8_i);
+		zeroize(atu8_i);
 
 		// > proceed with the next value for i
 		return bip32_derive(k_bip32, i_child + 1);
@@ -304,8 +304,8 @@ export const bip32_derive = async(
 		// > In case parse256(IL) ≥ n or ki = 0
 		if(!secp256k1_valid_sk(atu8_ki)) {
 			// panic wipe
-			zero_out(atu8_i);
-			zero_out(atu8_ki);
+			zeroize(atu8_i);
+			zeroize(atu8_ki);
 
 			// > proceed with the next value for i
 			return bip32_derive(k_bip32, i_child + 1);
@@ -386,13 +386,13 @@ export const bip32_destroy = (k_bip32: Bip32Handle): void => {
 
 	// destory private fields
 	runtime_key_destroy(k_sk);
-	zero_out(atu8_chain);
-	zero_out(atu8_parent);
+	zeroize(atu8_chain);
+	zeroize(atu8_parent);
 
 	// destroy public fields
-	zero_out(k_bip32.id);
-	zero_out(k_bip32.fp);
-	zero_out(k_bip32.pk33);
+	zeroize(k_bip32.id);
+	zeroize(k_bip32.fp);
+	zeroize(k_bip32.pk33);
 
 	// remove from weak map so don't accidentally try to use
 	hm_privates.delete(k_bip32);
