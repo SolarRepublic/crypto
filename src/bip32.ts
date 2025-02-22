@@ -430,11 +430,11 @@ export const bip32_derive_from_path = async(k_bip32: Bip32Handle, s_path: string
 	for(const si_part of a_parts) {
 		// hardened derivation
 		if(`'` === si_part.at(-1)) {
-			k_node = await bip32_derive(k_bip32, +si_part.slice(0, -1), 1);
+			k_node = await bip32_derive(k_node, +si_part.slice(0, -1), 1);
 		}
 		// non-hardened
 		else {
-			k_node = await bip32_derive(k_bip32, +si_part);
+			k_node = await bip32_derive(k_node, +si_part);
 		}
 	}
 
