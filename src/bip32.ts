@@ -1,7 +1,7 @@
 import type {KeyProducer, RuntimeKeyHandle} from './runtime-key';
 import type {NaiveBase58} from '@blake.regalia/belt';
 
-import {bytes, bytes_to_base58, concat2, dataview, die, hmac, sha256, subtle_import_key, subtle_sign, text_to_bytes, zeroize} from '@blake.regalia/belt';
+import {bytes, bytes_to_base58, concat2, dataview, die, hmac, sha256, sha256d, subtle_import_key, subtle_sign, text_to_bytes, zeroize} from '@blake.regalia/belt';
 
 import {ripemd160_sync_any} from './ripemd160';
 import {key_producer_resolve, runtime_key_access, runtime_key_create, runtime_key_destroy} from './runtime-key';
@@ -79,16 +79,21 @@ const hm_privates = HM_PRIVATES as WeakMap<Bip32Handle, Bip32PrivateFields>;
  * BIP-32
  * This proprietary implementation exclusively uses Uint8Arrays for all key material so they can be zeroed out after use.
  * This version also does not support "neutered" public keys as it is only concerned with private key generation.
+ * @param krk_sk - {@link RuntimeKeyHandle} to secret key data
+ * @param atu8_chain - 32-byte chain code
+ * @param atu8_parent - optional fingerprint of the parent's key
+ * @param i_depth - 4-byte depth code
+ * @param i_index - 4-byte child number
  */
 export const bip32_create = async(
-	k_sk: RuntimeKeyHandle,
+	krk_sk: RuntimeKeyHandle,
 	atu8_chain: Uint8Array,
 	atu8_parent=ATU8_FINGERPRINT_NIL,
 	i_depth=0,
 	i_index=0
 ): Promise<Bip32Handle> => {
 	// access the runtime key data
-	const atu8_pk33 = await runtime_key_access(k_sk, secp256k1_sk_to_pk);
+	const atu8_pk33 = await runtime_key_access(krk_sk, secp256k1_sk_to_pk);
 
 	// create the identifier
 	const atu8_id = ripemd160_sync_any(atu8_pk33);
@@ -104,7 +109,7 @@ export const bip32_create = async(
 
 	// set private fields
 	hm_privates.set(k_bip32, [
-		k_sk,
+		krk_sk,
 		atu8_chain,
 		atu8_parent,
 		i_index,
@@ -116,6 +121,7 @@ export const bip32_create = async(
 
 /**
  * BIP-32: {@link https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#Master_key_generation Master Key Generation}
+ * @param z_seed - {@link KeyProducer} to a master seed, for example the master seed derived from a BIP-39 mnemonic
  */
 export const bip32_from_master = async(z_seed: KeyProducer): Promise<Bip32Handle> => {
 	// create seed
@@ -217,7 +223,7 @@ export const bip32_export_base58 = async(k_bip32: Bip32Handle): Promise<NaiveBas
 	const atu8_serialized = await bip32_serialize(k_bip32);
 
 	// hash
-	const atu8_hash = await sha256(await sha256(atu8_serialized));
+	const atu8_hash = await sha256d(atu8_serialized);
 
 	// serialize(node) || checksum(serialize(node))
 	const atu8_data = concat2(atu8_serialized, atu8_hash.subarray(0, 4));

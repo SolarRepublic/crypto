@@ -203,13 +203,8 @@ export const runtime_key_access = async<w_return=unknown>(
 			zeroize(atu8_use);
 		}
 
-		// callback generate pair
+		// callback generate pair; will zeroize given bytes
 		fk_resolve(atu8_sk);
-
-		// then wipe the private key (redundant because of call to generate pair)
-		queueMicrotask(() => {
-			zeroize(atu8_sk);
-		});
 	}), atu8_salt, ni_bits);
 
 	// rotate keys
