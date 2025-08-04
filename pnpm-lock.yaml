@@ -12,8 +12,8 @@ importers:
         specifier: ^0.57.8
         version: 0.57.8(@typescript-eslint/parser@8.39.0(eslint@9.32.0)(typescript@5.9.2))(eslint@9.32.0)(ts-node@10.9.2(@types/node@24.2.0)(typescript@5.9.2))(typescript@5.9.2)
       '@solar-republic/wasm-secp256k1':
-        specifier: 0.6.2
-        version: 0.6.2
+        specifier: 0.6.3
+        version: 0.6.3
       hash-wasm:
         specifier: ^4.12.0
         version: 4.12.0
@@ -28,8 +28,8 @@ importers:
         specifier: ^12.1.4
         version: 12.1.4(rollup@4.46.2)(tslib@2.8.1)(typescript@5.9.2)
       '@solar-republic/types':
-        specifier: ^0.3.12
-        version: 0.3.12
+        specifier: ^0.3.13
+        version: 0.3.13
       '@tsconfig/node22':
         specifier: ^22.0.2
         version: 22.0.2
@@ -328,11 +328,11 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@solar-republic/types@0.3.12':
-    resolution: {integrity: sha512-u4nIRNLqK19V37S3BQjQeqncOemUh2p8NKZF+7xED+6mbscSsBYNNcenfZYRdd+o1mDX+d7hBGWd+waVqVxKIA==}
+  '@solar-republic/types@0.3.13':
+    resolution: {integrity: sha512-SxNr5GZdbOrz7ogrtIkZy8GoSC4DkSY6/s6HTWwE5wWppZvFb2HpMIZ3BUiPzOUdKV371zLaMgHgy/GllP/7oQ==}
 
-  '@solar-republic/wasm-secp256k1@0.6.2':
-    resolution: {integrity: sha512-0onTh84UW6xWhR2z1swHUWFETArcThe89LaH4v2E1BdATLaYg4nRcNWbiHB8jv77ST8tui/cLS6YZ18BQ39FPA==}
+  '@solar-republic/wasm-secp256k1@0.6.3':
+    resolution: {integrity: sha512-EqP3G3fYJ/WCtNDZYImTFkokF71mR/NobKA5+f2ntUe5JzSIqQlCRU7BZWHiU8VUk2GnNLilGvX5Rd7vOdqFuw==}
 
   '@stylistic/eslint-plugin-ts@2.13.0':
     resolution: {integrity: sha512-nooe1oTwz60T4wQhZ+5u0/GAu3ygkKF9vPPZeRn/meG71ntQ0EZXVOKEonluAYl/+CV2T+nN0dknHa4evAW13Q==}
@@ -1821,9 +1821,9 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.46.2':
     optional: true
 
-  '@solar-republic/types@0.3.12': {}
+  '@solar-republic/types@0.3.13': {}
 
-  '@solar-republic/wasm-secp256k1@0.6.2': {}
+  '@solar-republic/wasm-secp256k1@0.6.3': {}
 
   '@stylistic/eslint-plugin-ts@2.13.0(eslint@9.32.0)(typescript@5.9.2)':
     dependencies:
