@@ -1,4 +1,4 @@
-import {bytes, dataview, dataview_from} from '@blake.regalia/belt';
+import {bytes, dataview_from} from '@blake.regalia/belt';
 
 /**
  * Updates a cryptographic hash state
@@ -74,7 +74,7 @@ export const hash_finalize = (
 	f_construct: (dv_digest: DataView) => void,
 	nb_digest=32,
 	b_le=false
-): Uint8Array => {
+): Uint8Array<ArrayBuffer> => {
 	// 5.1.1: "Append the bit '1' to the end of the message, followed by 𝑘 zero bits"
 	// demarcate with high bit
 	atu8_buffer[ib_write++] = 0x80;

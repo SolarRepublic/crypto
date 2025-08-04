@@ -4,4 +4,4 @@ export const HM_PRIVATES = new WeakMap() as WeakMap<any, any> & {
 	get<w_return>(w_key: any): w_return;
 };
 
-export const random_bytes = (nb_size: number): Uint8Array => crypto.getRandomValues(bytes(nb_size));
+export const random_bytes = (nb_size: number): Uint8Array<ArrayBuffer> => crypto.getRandomValues(bytes(nb_size));

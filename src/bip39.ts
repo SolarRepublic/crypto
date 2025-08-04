@@ -17,8 +17,8 @@ import {ATU8_NIL, bytes, bytes_split, bytes_to_text, concat, concat2, crypto_ran
 
 import {runtime_key_create} from './runtime-key';
 
-export type DestroyableBytes = Subtype<Uint8Array, 'destroyable'>;
-export type DestroyableUint16Array = Subtype<Uint16Array, 'destroyable'>;
+export type DestroyableBytes = Subtype<Uint8Array<ArrayBuffer>, 'destroyable'>;
+export type DestroyableUint16Array = Subtype<Uint16Array<ArrayBuffer>, 'destroyable'>;
 
 // cache unicode space value
 export const XB_UNICODE_SPACE = ' '.charCodeAt(0);
@@ -134,7 +134,7 @@ const concated_bits_to_indicies = (atu8_range: Uint8Array): Uint16Array => Uint1
  */
 export const bip39_mnemonic_to_seed = async(
 	atu8_mnemonic: DestroyableBytes,
-	atu8_passphrase: Uint8Array=ATU8_NIL
+	atu8_passphrase: Uint8Array<ArrayBuffer>=ATU8_NIL
 ): Promise<RuntimeKeyHandle> => {
 	// import mnemonic to key
 	const dk_mnemonic = await subtle_import_key('raw', atu8_mnemonic, 'PBKDF2', false, ['deriveBits']);
@@ -211,7 +211,7 @@ export const bip39_mnemonic_to_seed = async(
  */
 export const bip39_mnemonic_parse = (
 	s_mnemonic: string
-): Uint8Array => text_to_bytes(s_mnemonic.trim().toLowerCase().split(/\s+/g).join(' ').normalize('NFKD'));
+): Uint8Array<ArrayBuffer> => text_to_bytes(s_mnemonic.trim().toLowerCase().split(/\s+/g).join(' ').normalize('NFKD'));
 
 /**
  * Parses a passphrase string into bytes, normalizing the encoding
@@ -219,7 +219,7 @@ export const bip39_mnemonic_parse = (
  */
 export const bip39_passphrase_parse = (
 	s_passphrase: string
-): Uint8Array => text_to_bytes(s_passphrase.normalize('NFKD'));
+): Uint8Array<ArrayBuffer> => text_to_bytes(s_passphrase.normalize('NFKD'));
 
 /**
  * Convert an indicies list into mnemonic bytes using a given wordlist
@@ -258,7 +258,7 @@ export const bip39_indicies_to_mnemonic = (
  * @returns 
  */
 export const bip39_expanded_validate = async(
-	atu8_expanded: Uint8Array
+	atu8_expanded: Uint8Array<ArrayBuffer>
 ): Promise<boolean> => {
 	// expect a valid length
 	const g_length = H_EXPANDED_LENGTHS[atu8_expanded.byteLength];
@@ -290,7 +290,7 @@ export const bip39_expanded_validate = async(
  */
 export const bip39_entropy_to_expanded = async(
 	atu8_entropy: DestroyableBytes
-): Promise<Uint8Array> => {
+): Promise<Uint8Array<ArrayBuffer>> => {
 	// expect a valid length
 	const g_length = H_ENTROPY_LENGTHS[atu8_entropy.byteLength];
 	if(!g_length) die('Invalid BIP-39 raw entropy byte length: '+atu8_entropy.byteLength);
@@ -353,8 +353,8 @@ export const bip39_mnemonic_to_indicies = (
  * @returns 
  */
 export const bip39_expanded_to_indicies = async(
-	atu8_expanded: Uint8Array
-): Promise<Uint16Array> => {
+	atu8_expanded: Uint8Array<ArrayBuffer>
+): Promise<Uint16Array<ArrayBuffer>> => {
 	// intercept any errors in order to destroy the expanded bytes
 	try {
 		// lookup length definition
@@ -435,7 +435,7 @@ export const bip39_entropy_to_indicies = async(
  */
 export const bip39_indicies_to_expanded = (
 	atu16_indicies: DestroyableUint16Array
-): Uint8Array => {
+): Uint8Array<ArrayBuffer> => {
 	// cache number of words
 	const nl_words = atu16_indicies.length;
 

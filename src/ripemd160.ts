@@ -9,7 +9,7 @@ import {ripemd160_wasm} from './wasm/ripemd160';
  * @param atu8_data - input data
  * @returns output digest
  */
-export const ripemd160_sync_any = (atu8_data: Uint8Array): Uint8Array =>
+export const ripemd160_sync_any = (atu8_data: Uint8Array): Uint8Array<ArrayBuffer> =>
 	// attempt sync WASM
 	try_sync(() => ripemd160_wasm(atu8_data))[0]
 

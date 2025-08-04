@@ -21,7 +21,7 @@ export const argon2id_wasm_hash = () => {
 
 };
 
-export async function argon2id_hash(gc_argon: Argon2idConfig): Promise<Uint8Array> {
+export async function argon2id_hash(gc_argon: Argon2idConfig): Promise<Uint8Array<ArrayBuffer>> {
 	return await argon2id({
 		outputType: 'binary',
 		password: gc_argon.phrase,
@@ -30,5 +30,5 @@ export async function argon2id_hash(gc_argon: Argon2idConfig): Promise<Uint8Arra
 		memorySize: Math.ceil((gc_argon.memory || 8 * 1024) / 1024),
 		parallelism: gc_argon.parallelism || 1,
 		hashLength: gc_argon.hashLen || 24,
-	});
+	}) as Uint8Array<ArrayBuffer>;
 }

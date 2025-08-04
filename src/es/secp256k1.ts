@@ -51,7 +51,7 @@ interface EcPoint {
 	mul(xg_n: bigint, xc_safe?: boolean | 0 | 1): EcPoint;
 	aff(): AffinePoint;
 	ok(this: EcPoint): this;
-	out(this: EcPoint, xc_uncompressed: boolean | 0 | 1): Uint8Array;
+	out(this: EcPoint, xc_uncompressed: boolean | 0 | 1): Uint8Array<ArrayBuffer>;
 }
 
 // const ec_point_eq = (k_a: EcPoint, k_b: EcPoint) => {
@@ -166,7 +166,7 @@ const ec_point = ([xg_x, xg_y, xg_z]: [xg_x: bigint, xg_y: bigint, xg_z: bigint]
 		return mod(xg_ay * xg_ay) === crv(xg_ax)? this: die('Invalid point');
 	},
 
-	out(xc_uncompressed: boolean | 0 | 1): Uint8Array {
+	out(xc_uncompressed: boolean | 0 | 1): Uint8Array<ArrayBuffer> {
 		const [xg_ax, xg_ay] = this.aff();
 
 		const atu8_out = bytes(1 + (((xc_uncompressed as number) + 1) * NB_FIELD));
@@ -255,7 +255,7 @@ const normalize_sk = (z_sk: Uint8Array | bigint): bigint => {
 export type RecoveryValue = 0 | 1 | 2 | 3;
 
 export type SignatureAndRecovery = [
-	atu8_signature: Uint8Array,
+	atu8_signature: Uint8Array<ArrayBuffer>,
 	xc_recovery: RecoveryValue,
 ];
 
@@ -299,7 +299,7 @@ const hmac_drbg = async<T>(atu8_seed_root: Uint8Array, f_predicate: Predicate<T>
 		atu8_b = await hmac_sha256(atu8_k, atu8_b);
 	};
 
-	const f_gen: () => Promise<Uint8Array> = async() => {
+	const f_gen: () => Promise<Uint8Array<ArrayBuffer>> = async() => {
 		if(i_attempts++ >= 1000) die('Made 1k attempts');
 
 		atu8_b = await hmac_sha256(atu8_k, atu8_b);
@@ -321,21 +321,21 @@ const hmac_drbg = async<T>(atu8_seed_root: Uint8Array, f_predicate: Predicate<T>
 };
 
 
-export const secp256k1_es_gen_sk = (): Uint8Array => secp256k1_es_ent_to_sk(crypto_random_bytes(NB_FIELD + 8));
+export const secp256k1_es_gen_sk = (): Uint8Array<ArrayBuffer> => secp256k1_es_ent_to_sk(crypto_random_bytes(NB_FIELD + 8));
 
-export const secp256k1_es_ent_to_sk = (atu8_entropy: Uint8Array): Uint8Array => atu8_entropy.length < NB_FIELD + 8 || atu8_entropy.length > 1024
+export const secp256k1_es_ent_to_sk = (atu8_entropy: Uint8Array): Uint8Array<ArrayBuffer> => atu8_entropy.length < NB_FIELD + 8 || atu8_entropy.length > 1024
 	? die('Invalid entropy')
 	: biguint_to_bytes_be(mod(bytes_to_biguint_be(atu8_entropy), XG_CURVE_ORDER - 1n) + 1n);
 
-export const secp256k1_es_sk_to_pk = (z_sk: Uint8Array | bigint, xc_uncompressed: boolean | 0 | 1=0 as const): Uint8Array => KP_BASE.mul(normalize_sk(z_sk)).out(xc_uncompressed);
+export const secp256k1_es_sk_to_pk = (z_sk: Uint8Array | bigint, xc_uncompressed: boolean | 0 | 1=0 as const): Uint8Array<ArrayBuffer> => KP_BASE.mul(normalize_sk(z_sk)).out(xc_uncompressed);
 
 export const secp256k1_es_valid_sk = (atu8_sk: Uint8Array) => normalize_sk(atu8_sk) && atu8_sk;
 
-export const secp256k1_es_ecdh = (atu8_sk: Uint8Array, atu8_pk: Uint8Array, b_uncompressed?: boolean): Uint8Array => import_ec_point(atu8_pk).mul(normalize_sk(atu8_sk)).out(b_uncompressed || 0);
+export const secp256k1_es_ecdh = (atu8_sk: Uint8Array, atu8_pk: Uint8Array, b_uncompressed?: boolean): Uint8Array<ArrayBuffer> => import_ec_point(atu8_pk).mul(normalize_sk(atu8_sk)).out(b_uncompressed || 0);
 
-export const secp256k1_es_tweak_sk_add = (atu8_sk: Uint8Array, atu8_tweak: Uint8Array): Uint8Array => biguint_to_bytes_be(mod(normalize_sk(atu8_sk) + bytes_to_biguint_be(atu8_tweak), XG_CURVE_ORDER));
+export const secp256k1_es_tweak_sk_add = (atu8_sk: Uint8Array, atu8_tweak: Uint8Array): Uint8Array<ArrayBuffer> => biguint_to_bytes_be(mod(normalize_sk(atu8_sk) + bytes_to_biguint_be(atu8_tweak), XG_CURVE_ORDER));
 
-export const secp256k1_es_tweak_sk_mul = (atu8_sk: Uint8Array, atu8_tweak: Uint8Array): Uint8Array => biguint_to_bytes_be(mod(normalize_sk(atu8_sk) * bytes_to_biguint_be(atu8_tweak), XG_CURVE_ORDER));
+export const secp256k1_es_tweak_sk_mul = (atu8_sk: Uint8Array, atu8_tweak: Uint8Array): Uint8Array<ArrayBuffer> => biguint_to_bytes_be(mod(normalize_sk(atu8_sk) * bytes_to_biguint_be(atu8_tweak), XG_CURVE_ORDER));
 
 // export const secp256k1_es_tweak_pk_add = (atu8_pk: Uint8Array, atu8_tweak: Uint8Array): Uint8Array => {
 // 	import_ec_point(atu8_pk).add(import_)
@@ -345,7 +345,7 @@ export const secp256k1_es_tweak_sk_mul = (atu8_sk: Uint8Array, atu8_tweak: Uint8
 
 export type Signature = [xg_r: bigint, xg_s: bigint];
 
-export const secp256k1_es_sign = async(atu8_sk: Uint8Array, atu8_hash: Uint8Array, atu8_ent?: Nilable<Uint8Array>): Promise<SignatureAndRecovery> => {
+export const secp256k1_es_sign = async(atu8_sk: Uint8Array, atu8_hash: Uint8Array, atu8_ent?: Nilable<Uint8Array<ArrayBuffer>>): Promise<SignatureAndRecovery> => {
 	const xg_h1i = mod(bitsequence_to_uint(atu8_hash), XG_CURVE_ORDER);
 
 	const atu8_h1o = biguint_to_bytes_be(xg_h1i);
@@ -433,7 +433,7 @@ export const secp256k1_es_verify = (atu8_signature: Uint8Array, atu8_hash: Uint8
 	return mod(a_aff_r[0], XG_CURVE_ORDER) === xg_r;
 };
 
-const hmac_sha256 = (atu8_key: Uint8Array, atu8_data: Uint8Array) => hmac(atu8_key, atu8_data, SI_HASH_ALGORITHM_SHA256);
+const hmac_sha256 = (atu8_key: Uint8Array<ArrayBuffer>, atu8_data: Uint8Array<ArrayBuffer>) => hmac(atu8_key, atu8_data, SI_HASH_ALGORITHM_SHA256);
 
 
 // let A_PRECOMPUTED: EcPoint[] | undefined;

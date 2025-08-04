@@ -22,12 +22,12 @@ export type Bip32Handle = {
 	/**
 	 * identifier
 	 */
-	id: Uint8Array;
+	id: Uint8Array<ArrayBuffer>;
 
 	/**
 	 * fingerprint
 	 */
-	fp: Uint8Array;
+	fp: Uint8Array<ArrayBuffer>;
 
 	/**
 	 * is the master node?
@@ -37,7 +37,7 @@ export type Bip32Handle = {
 	/**
 	 * 33-byte public key
 	 */
-	pk33: Uint8Array;
+	pk33: Uint8Array<ArrayBuffer>;
 
 	/**
 	 * depth
@@ -48,8 +48,8 @@ export type Bip32Handle = {
 // the private fields of a Bip32 instance
 type Bip32PrivateFields = [
 	k_sk: RuntimeKeyHandle,
-	atu8_chain: Uint8Array,
-	atu8_parent: Uint8Array,
+	atu8_chain: Uint8Array<ArrayBuffer>,
+	atu8_parent: Uint8Array<ArrayBuffer>,
 	i_index: number,
 ];
 
@@ -87,7 +87,7 @@ const hm_privates = HM_PRIVATES as WeakMap<Bip32Handle, Bip32PrivateFields>;
  */
 export const bip32_create = async(
 	krk_sk: RuntimeKeyHandle,
-	atu8_chain: Uint8Array,
+	atu8_chain: Uint8Array<ArrayBuffer>,
 	atu8_parent=ATU8_FINGERPRINT_NIL,
 	i_depth=0,
 	i_index=0
@@ -172,7 +172,7 @@ export const bip32_from_master = async(z_seed: KeyProducer): Promise<Bip32Handle
  * @param k_bip32 
  * @returns 
  */
-export const bip32_serialize = async(k_bip32: Bip32Handle): Promise<Uint8Array> => {
+export const bip32_serialize = async(k_bip32: Bip32Handle): Promise<Uint8Array<ArrayBuffer>> => {
 	// destructure private fields
 	const [
 		k_sk,

@@ -138,7 +138,7 @@ export const bech32_encode = <
 
 export const bech32_decode = <
 	sa_defined extends string,
->(sa_bech32: Nilable<sa_defined>): Uint8Array | PropagateUndefined<sa_defined> => {
+>(sa_bech32: Nilable<sa_defined>): Uint8Array<ArrayBuffer> | PropagateUndefined<sa_defined> => {
 	if(!sa_bech32) return __UNDEFINED as PropagateUndefined<sa_defined>;
 
 	const [s_prefix, sx_data] = sa_bech32.split('1');

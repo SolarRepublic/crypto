@@ -9,7 +9,7 @@ import {sha256_sync_wasm} from './wasm/sha256';
  * @param atu8_data - input data
  * @returns output digest
  */
-export const sha256_sync_any = (atu8_data: Uint8Array): Uint8Array =>
+export const sha256_sync_any = (atu8_data: Uint8Array): Uint8Array<ArrayBuffer> =>
 	// attempt sync WASM
 	try_sync(() => sha256_sync_wasm(atu8_data))[0]
 	// use fallback

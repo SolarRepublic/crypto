@@ -49,7 +49,7 @@ const ATU32_SHA256_W = /* @__PURE__ */ new Uint32Array(64);
 /* eslint-disable @typescript-eslint/naming-convention */
 export const sha256_sync_es = (
 	_atu8_data: Uint8Array
-): Uint8Array => {
+): Uint8Array<ArrayBuffer> => {
 	// prep working buffer
 	const _atu8_buffer = bytes(64);
 	const _dv_buffer = dataview_from(_atu8_buffer);

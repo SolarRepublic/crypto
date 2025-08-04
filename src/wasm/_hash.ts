@@ -12,7 +12,7 @@ export type ReferenceObject<w_wrapped> = {
 export type Hasher = {
 	i(_?: never): Hasher;
 	u(atu8_data: Uint8Array): Hasher;
-	d(nb_padding?: number): Uint8Array;
+	d(nb_padding?: number): Uint8Array<ArrayBuffer>;
 };
 
 export type HasherReferenceObject = ReferenceObject<Hasher>;
@@ -58,7 +58,7 @@ export const hasher_loader = (
 ] as const;
 
 export const instantiate_wasm = async(
-	atu8_binary: Uint8Array,
+	atu8_binary: Uint8Array<ArrayBuffer>,
 	nb_digest: number,
 	ni_bits?: number
 ): Promise<Hasher> => {
@@ -83,7 +83,7 @@ export const instantiate_wasm = async(
 	// create heap view
 	let atu8_heap = bytes(ab_buffer, xb_offset, NB_MAX_HEAP);
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 	let f_init = (_?: never) => (g_exports.Hash_Init(ni_bits), k_self);
 
 	/* eslint-disable no-sequences */

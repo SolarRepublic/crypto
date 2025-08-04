@@ -17,12 +17,12 @@ export class AesGcmDecryptionError extends Error {
 
 
 export async function aes_gcm_encrypt(
-	atu8_data: Uint8Array,
+	atu8_data: Uint8Array<ArrayBuffer>,
 	dk_key: CryptoKey,
-	atu8_nonce: Uint8Array,
+	atu8_nonce: Uint8Array<ArrayBuffer>,
 	atu8_verify=ATU8_SHA256_STARSHELL,
 	ni_tag=128
-): Promise<Uint8Array> {
+): Promise<Uint8Array<ArrayBuffer>> {
 	try {
 		return bytes(await subtle_encrypt({
 			name: 'AES-GCM',
@@ -37,12 +37,12 @@ export async function aes_gcm_encrypt(
 }
 
 export async function aes_gcm_decrypt(
-	atu8_data: Uint8Array,
+	atu8_data: Uint8Array<ArrayBuffer>,
 	dk_key: CryptoKey,
-	atu8_nonce: Uint8Array,
+	atu8_nonce: Uint8Array<ArrayBuffer>,
 	atu8_verify=ATU8_SHA256_STARSHELL,
 	ni_tag=128
-): Promise<Uint8Array> {
+): Promise<Uint8Array<ArrayBuffer>> {
 	try {
 		return bytes(await subtle_decrypt({
 			name: 'AES-GCM',

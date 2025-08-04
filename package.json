@@ -42,30 +42,31 @@
   "devDependencies": {
     "@blake.regalia/eslint-config-elite": "^0.5.22",
     "@blake.regalia/tsconfig": "^0.3.7",
-    "@rollup/plugin-typescript": "^12.1.2",
-    "@solar-republic/types": "^0.3.9",
-    "@types/chai": "^5.0.1",
-    "@types/node": "^22.13.5",
-    "@types/web": "^0.0.205",
-    "@typescript-eslint/parser": "^8.24.1",
-    "bun-types": "^1.2.2",
-    "chai": "^5.2.0",
+    "@rollup/plugin-typescript": "^12.1.4",
+    "@solar-republic/types": "^0.3.12",
+    "@tsconfig/node22": "^22.0.2",
+    "@types/chai": "^5.2.2",
+    "@types/node": "^24.2.0",
+    "@types/web": "^0.0.259",
+    "@typescript-eslint/parser": "^8.39.0",
+    "bun-types": "^1.2.19",
+    "chai": "^5.2.1",
     "chai-bites": "^0.2.0",
     "esformatter": "^0.11.3",
-    "eslint": "^9.21.0",
-    "rollup": "^4.34.8",
+    "eslint": "^9.32.0",
+    "rollup": "^4.46.2",
     "ts-node": "^10.9.2",
     "ts-toolbelt": "^9.6.0",
     "tsc-esm-fix": "^3.1.2",
-    "typescript": "^5.7.3"
+    "typescript": "^5.9.2"
   },
   "dependencies": {
-    "@blake.regalia/belt": "^0.57.1",
-    "@solar-republic/wasm-secp256k1": "0.5.0",
+    "@blake.regalia/belt": "^0.57.8",
+    "@solar-republic/wasm-secp256k1": "0.6.2",
     "hash-wasm": "^4.12.0"
   },
   "publishConfig": {
     "access": "public"
   },
-  "packageManager": "pnpm@9.0.6+sha1.648f6014eb363abb36618f2ba59282a9eeb3e879"
+  "packageManager": "pnpm@10.14.0"
 }

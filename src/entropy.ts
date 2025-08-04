@@ -8,7 +8,11 @@ import {random_bytes} from './util.js';
  * produces "random" values of various types within given ranges
  */
 export class EntropyProducer {
-	static async create(n_variables: number, i_iterator: number, atu8_seed?: Uint8Array): Promise<EntropyProducer> {
+	static async create(
+		n_variables: number,
+		i_iterator: number,
+		atu8_seed?: Uint8Array<ArrayBuffer>
+	): Promise<EntropyProducer> {
 		// no seed given, fill with 256 random bits
 		if(!atu8_seed) atu8_seed = random_bytes(32);
 

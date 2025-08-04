@@ -6,17 +6,17 @@ import {HM_PRIVATES, random_bytes} from './util.js';
 /**
  * Callback that returns or resolves to a private key as an Uint8Array.
  */
-export type KeyProducer<dc_type extends ArrayBufferView=Uint8Array> = dc_type | (() => dc_type | Promise<dc_type>);
+export type KeyProducer<dc_type extends ArrayBufferView<ArrayBuffer>=Uint8Array<ArrayBuffer>> = dc_type | (() => dc_type | Promise<dc_type>);
 
 // runtime key handle
 export type RuntimeKeyHandle = Record<never, never>;
 
 // the private fields of a RuntimeKey instance
 type RuntimePrivateKeyFields = [
-	atu8_salt: Uint8Array,
+	atu8_salt: Uint8Array<ArrayBuffer>,
 	ni_bits: number,
 	dk_base: CryptoKey,
-	atu8_xor: Uint8Array,
+	atu8_xor: Uint8Array<ArrayBuffer>,
 ];
 
 /**
@@ -24,7 +24,7 @@ type RuntimePrivateKeyFields = [
  * @param z_key 
  * @returns 
  */
-export const key_producer_resolve = async<w_key extends ArrayBufferView>(
+export const key_producer_resolve = async<w_key extends ArrayBufferView<ArrayBuffer>>(
 	z_key: KeyProducer<w_key>
 ): Promise<w_key> => ArrayBuffer.isView(z_key)
 	? z_key: is_function(z_key)
@@ -36,10 +36,10 @@ export const key_producer_resolve = async<w_key extends ArrayBufferView>(
  */
 const fetch_derived = async(
 	dk_base: CryptoKey,
-	atu8_salt: Uint8Array,
+	atu8_salt: Uint8Array<ArrayBuffer>,
 	ni_bits=256,
 	atu8_info=bytes(0)
-): Promise<Uint8Array> => bytes(await subtle_derive_bits({
+): Promise<Uint8Array<ArrayBuffer>> => bytes(await subtle_derive_bits({
 	name: 'HKDF',
 	hash: 'SHA-256',
 	salt: atu8_salt,
@@ -87,7 +87,11 @@ const xor_bytes = (atu8_a: Uint8Array, atu8_b: Uint8Array) => bytes(atu8_a.map((
  * however, it does (albeit under ideal circumstances) reduce the amount of time the private key exists at
  * a single location within process memory, thus reducing its temporal footprint.
  */
-async function generate_pair(zk_sk: KeyProducer, atu8_salt: Uint8Array, ni_bits=256): Promise<[CryptoKey, Uint8Array]> {
+async function generate_pair(
+	zk_sk: KeyProducer,
+	atu8_salt: Uint8Array<ArrayBuffer>,
+	ni_bits=256
+): Promise<[CryptoKey, Uint8Array<ArrayBuffer>]> {
 	// derive a random 256-bit 'one-time pad' key
 	const atu8_otp = random_bytes(Math.ceil(ni_bits / 8));
 
@@ -130,7 +134,10 @@ const hm_privates = HM_PRIVATES as WeakMap<RuntimeKeyHandle, RuntimePrivateKeyFi
  * @param ni_bits - 
  * @returns 
  */
-export const runtime_key_create = async(zk_sk: KeyProducer, ni_bits=256): Promise<RuntimeKeyHandle> => {
+export const runtime_key_create = async(
+	zk_sk: KeyProducer,
+	ni_bits=256
+): Promise<RuntimeKeyHandle> => {
 	// create instance
 	const k_instance: RuntimeKeyHandle = {};
 

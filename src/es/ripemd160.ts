@@ -72,7 +72,7 @@ const twid = (i_group: number, xn_x: number, xn_y: number, xn_z: number): number
 				: xn_x ^ (xn_y | ~xn_z);
 
 /* eslint-disable @typescript-eslint/naming-convention,  prefer-const */
-export const ripemd160_es = (_atu8_data: Uint8Array): Uint8Array => {
+export const ripemd160_es = (_atu8_data: Uint8Array): Uint8Array<ArrayBuffer> => {
 	// prep working buffer
 	let _atu8_buffer = bytes(NB_BLOCK);
 	let _dv_block = dataview_from(_atu8_buffer);
