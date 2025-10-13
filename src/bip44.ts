@@ -7,7 +7,7 @@ import {bip32_from_master, bip32_derive_from_path, bip32_export} from './bip32';
 import {bip39_mnemonic_to_seed, bip39_passphrase_parse} from './bip39';
 import {runtime_key_access} from './runtime-key';
 
-export type Bip44Path = `m/44'/${bigint}'/${bigint}'/${bigint}/${bigint}/${bigint}`;
+export type Bip44Path = `m/44'/${bigint}'/${bigint}'/${bigint}/${bigint}`;
 
 /**
  * Converts a mnemonic seed phrase and BIP-44 path into a private key
