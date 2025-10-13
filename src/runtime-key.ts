@@ -171,7 +171,7 @@ export const runtime_key_create = async(
  */
 export const runtime_key_access = async<w_return=unknown>(
 	k_key: RuntimeKeyHandle,
-	fk_use: (atu8_sk: Uint8Array) => w_return
+	fk_use: (atu8_sk: Uint8Array<ArrayBuffer>) => w_return
 ): Promise<w_return> => {
 	// ref and destructure private fields
 	const [atu8_salt, ni_bits, dk_base, atu8_xor] = hm_privates.get(k_key)!;
@@ -181,7 +181,7 @@ export const runtime_key_access = async<w_return=unknown>(
 	let e_thrown: unknown;
 
 	// prep a temporary use buffer
-	let atu8_use!: Uint8Array;
+	let atu8_use!: Uint8Array<ArrayBuffer>;
 
 	// prepare the next one-time pad
 	const [dk_base_new, atu8_xor_new] = await generate_pair(() => new Promise(async(fk_resolve) => {
