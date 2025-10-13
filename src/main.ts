@@ -2,6 +2,7 @@ export * from './aes.js';
 export * from './bech32.js';
 export * from './bip32.js';
 export * from './bip39.js';
+export * from './bip44.js';
 export * from './constants.js';
 export * from './entropy.js';
 export * from './runtime-key.js';
